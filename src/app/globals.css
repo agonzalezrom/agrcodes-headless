@@ -1,0 +1,975 @@
+/* v2 - Rebuilt to fix Tailwind processing issues */
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: 255 255 255;
+  --foreground: 17 24 39;
+  --card: 255 255 255;
+  --card-foreground: 17 24 39;
+  --popover: 255 255 255;
+  --popover-foreground: 17 24 39;
+  --primary: 17 24 39;
+  --primary-foreground: 249 250 251;
+  --secondary: 243 244 246;
+  --secondary-foreground: 17 24 39;
+  --muted: 243 244 246;
+  --muted-foreground: 107 114 128;
+  --accent: 243 244 246;
+  --accent-foreground: 17 24 39;
+  --destructive: 239 68 68;
+  --destructive-foreground: 255 255 255;
+  --border: 229 231 235;
+  --input: 229 231 235;
+  --ring: 17 24 39;
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: 15 23 42;
+  --foreground: 241 245 249;
+  --card: 15 23 42;
+  --card-foreground: 241 245 249;
+  --popover: 15 23 42;
+  --popover-foreground: 241 245 249;
+  --primary: 241 245 249;
+  --primary-foreground: 15 23 42;
+  --secondary: 30 41 59;
+  --secondary-foreground: 241 245 249;
+  --muted: 30 41 59;
+  --muted-foreground: 148 163 184;
+  --accent: 30 41 59;
+  --accent-foreground: 241 245 249;
+  --destructive: 220 38 38;
+  --destructive-foreground: 254 242 242;
+  --border: 51 65 85;
+  --input: 51 65 85;
+  --ring: 148 163 184;
+}
+
+@theme inline {
+  --color-background: rgb(var(--background));
+  --color-foreground: rgb(var(--foreground));
+  --color-card: rgb(var(--card));
+  --color-card-foreground: rgb(var(--card-foreground));
+  --color-popover: rgb(var(--popover));
+  --color-popover-foreground: rgb(var(--popover-foreground));
+  --color-primary: rgb(var(--primary));
+  --color-primary-foreground: rgb(var(--primary-foreground));
+  --color-secondary: rgb(var(--secondary));
+  --color-secondary-foreground: rgb(var(--secondary-foreground));
+  --color-muted: rgb(var(--muted));
+  --color-muted-foreground: rgb(var(--muted-foreground));
+  --color-accent: rgb(var(--accent));
+  --color-accent-foreground: rgb(var(--accent-foreground));
+  --color-destructive: rgb(var(--destructive));
+  --color-destructive-foreground: rgb(var(--destructive-foreground));
+  --color-border: rgb(var(--border));
+  --color-input: rgb(var(--input));
+  --color-ring: rgb(var(--ring));
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --font-sans: var(--font-dm-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    transition: background-color 0.2s, color 0.2s;
+  }
+
+  /* Asegurar que el contenido de WordPress use nuestro tema */
+  .prose {
+    color: var(--color-foreground);
+    font-size: 1.125rem;
+  }
+
+  @media (min-width: 768px) {
+    .prose {
+      font-size: 1.1875rem;
+    }
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-sans);
+    letter-spacing: -0.025em;
+    font-weight: 700;
+    background: linear-gradient(90deg, currentColor 0%, currentColor 100%);
+    background-size: 100% 100%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    transition: all 0.3s ease;
+  }
+
+  h1:hover,
+  h2:hover,
+  h3:hover,
+  h4:hover,
+  h5:hover,
+  h6:hover {
+    background: linear-gradient(
+      90deg,
+      rgb(239, 68, 68) 0%,
+      rgb(249, 115, 22) 25%,
+      rgb(234, 179, 8) 50%,
+      rgb(34, 197, 94) 75%,
+      rgb(59, 130, 246) 100%
+    );
+    background-size: 200% 100%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradient-shift 3s ease infinite;
+  }
+
+  @keyframes gradient-shift {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  /* Headings dentro del contenido de posts */
+  .prose h1 {
+    font-size: 2.25rem;
+    line-height: 1.2;
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .prose h2 {
+    font-size: 1.875rem;
+    line-height: 1.3;
+    margin-top: 2.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .prose h3 {
+    font-size: 1.5rem;
+    line-height: 1.4;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .prose h4 {
+    font-size: 1.25rem;
+    line-height: 1.5;
+    margin-top: 1.75rem;
+    margin-bottom: 0.875rem;
+  }
+
+  .prose h5 {
+    font-size: 1.125rem;
+    line-height: 1.5;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .prose h6 {
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  p {
+    line-height: 1.75;
+    margin-bottom: 1.5rem;
+  }
+
+  a {
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+
+  a:hover {
+    opacity: 0.7;
+  }
+
+  .wp-block-image {
+    margin: 2rem 0;
+  }
+
+  .wp-block-image img {
+    border-radius: 0.5rem;
+    width: 100%;
+    height: auto;
+  }
+
+  .wp-block-image figcaption {
+    font-size: 0.875rem;
+    color: var(--color-muted-foreground);
+    margin-top: 0.5rem;
+    text-align: center;
+    font-style: italic;
+  }
+
+  /* WordPress Quote Blocks - Stunning Design */
+  .wp-block-quote {
+    position: relative;
+    border: none;
+    padding: 2rem 2rem 2rem 4rem;
+    margin: 3rem 0;
+    background: linear-gradient(135deg, var(--color-muted) 0%, var(--color-secondary) 100%);
+    border-radius: 1rem;
+    font-style: italic;
+    font-size: 1.25rem;
+    line-height: 1.8;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+
+  .wp-block-quote::before {
+    content: '"';
+    position: absolute;
+    left: 1rem;
+    top: 0.5rem;
+    font-size: 6rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--color-primary);
+    opacity: 0.15;
+    font-family: Georgia, serif;
+  }
+
+  .wp-block-quote p {
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .wp-block-quote cite {
+    font-size: 0.9375rem;
+    color: var(--color-muted-foreground);
+    font-style: normal;
+    display: block;
+    margin-top: 1rem;
+    font-weight: 600;
+  }
+
+  .wp-block-quote cite::before {
+    content: "— ";
+  }
+
+  /* Pullquote - Even More Dramatic */
+  .wp-block-pullquote {
+    position: relative;
+    border: none;
+    padding: 3rem 2rem;
+    margin: 4rem 0;
+    background: var(--color-card);
+    border-radius: 1.5rem;
+    text-align: center;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
+  }
+
+  .wp-block-pullquote::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg,
+      rgb(239, 68, 68) 0%,
+      rgb(249, 115, 22) 25%,
+      rgb(234, 179, 8) 50%,
+      rgb(34, 197, 94) 75%,
+      rgb(59, 130, 246) 100%);
+  }
+
+  .wp-block-pullquote blockquote {
+    font-size: 1.875rem;
+    font-weight: 600;
+    line-height: 1.4;
+    font-style: italic;
+    margin: 0;
+  }
+
+  .wp-block-pullquote cite {
+    font-size: 1rem;
+    color: var(--color-muted-foreground);
+    font-style: normal;
+    margin-top: 1.5rem;
+    display: block;
+    font-weight: 500;
+  }
+
+  /* Gallery - Modern Grid with Hover Effects */
+  .wp-block-gallery {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin: 3rem 0;
+  }
+
+  @media (min-width: 768px) {
+    .wp-block-gallery {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+  }
+
+  .wp-block-gallery .wp-block-image {
+    margin: 0;
+    overflow: hidden;
+    border-radius: 0.75rem;
+    transition: transform 0.3s ease;
+  }
+
+  .wp-block-gallery .wp-block-image:hover {
+    transform: scale(1.05);
+  }
+
+  .wp-block-gallery img {
+    transition: transform 0.3s ease;
+  }
+
+  .wp-block-gallery .wp-block-image:hover img {
+    transform: scale(1.1);
+  }
+
+  .wp-block-video,
+  .wp-block-embed {
+    margin: 2rem 0;
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+
+  .wp-block-audio {
+    margin: 1.5rem 0;
+  }
+
+  /* WordPress table wrapper */
+  .wp-block-table,
+  figure.wp-block-table {
+    margin: 2rem 0;
+    overflow: hidden;
+    border-radius: 0.75rem;
+    border: 1px solid var(--color-border);
+    background: var(--color-card);
+  }
+
+  .wp-block-table table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 !important;
+  }
+
+  /* Table header */
+  .wp-block-table thead {
+    background-color: var(--color-muted);
+  }
+
+  .wp-block-table th {
+    background-color: var(--color-muted);
+    padding: 0.75rem 1rem;
+    font-weight: 600;
+    border-bottom: 1px solid var(--color-border);
+    border-right: 1px solid var(--color-border);
+  }
+
+  .wp-block-table th:last-child {
+    border-right: none;
+  }
+
+  /* Respetar alineación de WordPress */
+  .wp-block-table th.has-text-align-center,
+  .wp-block-table td.has-text-align-center {
+    text-align: center;
+  }
+
+  .wp-block-table th.has-text-align-left,
+  .wp-block-table td.has-text-align-left {
+    text-align: left;
+  }
+
+  .wp-block-table th.has-text-align-right,
+  .wp-block-table td.has-text-align-right {
+    text-align: right;
+  }
+
+  /* Table body */
+  .wp-block-table tbody tr {
+    background-color: var(--color-card);
+  }
+
+  .wp-block-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--color-border);
+    border-right: 1px solid var(--color-border);
+  }
+
+  .wp-block-table td:last-child {
+    border-right: none;
+  }
+
+  .wp-block-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* Code dentro de tablas */
+  .wp-block-table code {
+    font-size: 0.875rem;
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.25rem;
+    background-color: var(--color-muted);
+    font-family: ui-monospace, "SF Mono", Monaco, Consolas, monospace;
+  }
+
+  /* Prose tables (fallback para tablas no de WordPress) */
+  .prose table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2rem 0;
+    overflow: hidden;
+    border-radius: 0.75rem;
+    border: 1px solid var(--color-border);
+    background: var(--color-card);
+  }
+
+  .prose thead {
+    background-color: var(--color-muted);
+  }
+
+  .prose th {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 1px solid var(--color-border);
+    border-right: 1px solid var(--color-border);
+  }
+
+  .prose th:last-child {
+    border-right: none;
+  }
+
+  .prose td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--color-border);
+    border-right: 1px solid var(--color-border);
+  }
+
+  .prose td:last-child {
+    border-right: none;
+  }
+
+  .prose tr:last-child td {
+    border-bottom: none;
+  }
+
+  .wp-block-separator {
+    margin: 3rem 0;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .wp-block-spacer {
+    margin: 2rem 0;
+  }
+
+  .wp-block-columns {
+    display: grid;
+    gap: 2rem;
+    margin: 2rem 0;
+  }
+
+  @media (min-width: 768px) {
+    .wp-block-columns {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .wp-block-column {
+    flex: 1;
+  }
+
+  .wp-block-group {
+    margin: 2rem 0;
+  }
+
+  .wp-block-cover {
+    position: relative;
+    margin: 2rem 0;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Buttons - Modern with Gradient on Hover */
+  .wp-block-button {
+    display: inline-block;
+    margin: 1.5rem 0;
+  }
+
+  .wp-block-button__link {
+    position: relative;
+    background-color: var(--color-foreground);
+    color: var(--color-background);
+    padding: 0.875rem 2rem;
+    border-radius: 0.625rem;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+  }
+
+  .wp-block-button__link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg,
+      rgb(239, 68, 68) 0%,
+      rgb(249, 115, 22) 50%,
+      rgb(234, 179, 8) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 0;
+  }
+
+  .wp-block-button__link:hover::before {
+    opacity: 1;
+  }
+
+  .wp-block-button__link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+
+  .wp-block-button__link span {
+    position: relative;
+    z-index: 1;
+  }
+
+  .wp-block-list {
+    margin: 1.5rem 0;
+  }
+
+  .wp-block-list li {
+    line-height: 1.75;
+    margin: 0.5rem 0;
+  }
+
+  /* Code Block Pro - Vercel Style */
+  .wp-block-code-block-pro,
+  .wp-block-kevinbatdorf-code-block-pro,
+  .code-block-wrapper {
+    position: relative !important;
+    margin: 2rem 0 !important;
+    border-radius: 0.75rem !important;
+    border: 1px solid var(--color-border) !important;
+    overflow: hidden !important;
+    background: var(--color-card) !important;
+    font-family: ui-monospace, "SF Mono", Monaco, "Cascadia Mono", "Segoe UI Mono", "Roboto Mono", Consolas, monospace !important;
+  }
+
+  /* Header del code block */
+  .wp-block-code-block-pro .code-block-header,
+  .code-block-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: var(--color-muted);
+    border-bottom: 1px solid var(--color-border);
+    min-height: 2.5rem;
+  }
+
+  /* Label de lenguaje en el header */
+  .wp-block-code-block-pro .code-language,
+  .code-language {
+    font-size: 0.8125rem;
+    color: var(--color-muted-foreground);
+    font-weight: 500;
+    font-family: var(--font-sans);
+    text-transform: capitalize;
+  }
+
+  /* Pre styling */
+  .wp-block-code-block-pro pre,
+  .wp-block-kevinbatdorf-code-block-pro pre,
+  .code-block-wrapper pre {
+    margin: 0 !important;
+    padding: 1rem !important;
+    overflow-x: auto !important;
+    background: var(--color-card) !important;
+  }
+
+  /* Shiki theme override */
+  .wp-block-code-block-pro pre.shiki,
+  .wp-block-kevinbatdorf-code-block-pro pre.shiki {
+    background-color: var(--color-card) !important;
+  }
+
+  /* Code styling */
+  .wp-block-code-block-pro code,
+  .wp-block-kevinbatdorf-code-block-pro code,
+  .code-block-wrapper code {
+    font-family: ui-monospace, "SF Mono", Monaco, "Cascadia Mono", "Segoe UI Mono", "Roboto Mono", Consolas, monospace !important;
+    font-size: 0.875rem !important;
+    line-height: 1.1 !important;
+    color: var(--color-foreground) !important;
+  }
+
+  /* Code block lines */
+  .wp-block-code-block-pro .line,
+  .wp-block-kevinbatdorf-code-block-pro .line {
+    display: block;
+  }
+
+  /* Sobrescribir colores de sintaxis inline */
+  .wp-block-code-block-pro .line span,
+  .wp-block-kevinbatdorf-code-block-pro .line span {
+    color: inherit !important;
+  }
+
+  /* Comandos/funciones - teal */
+  .wp-block-code-block-pro .line span:first-child,
+  .wp-block-kevinbatdorf-code-block-pro .line span:first-child {
+    color: rgb(15, 118, 110) !important;
+  }
+
+  .dark .wp-block-code-block-pro .line span:first-child,
+  .dark .wp-block-kevinbatdorf-code-block-pro .line span:first-child {
+    color: rgb(94, 234, 212) !important;
+  }
+
+  /* Copy button dentro del header */
+  .code-block-header span[role="button"][aria-label="Copy"] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.375rem;
+    background: transparent;
+    border: 1px solid var(--color-border);
+    color: var(--color-foreground);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.75rem;
+  }
+
+  .code-block-header span[role="button"][aria-label="Copy"]:hover {
+    background: var(--color-secondary);
+    border-color: var(--color-foreground);
+  }
+
+  .code-block-header span[role="button"][aria-label="Copy"].copied {
+    background: rgb(34, 197, 94);
+    border-color: rgb(34, 197, 94);
+    color: white;
+  }
+
+  .code-block-header span[role="button"][aria-label="Copy"] svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .code-block-header span[role="button"][aria-label="Copy"] svg path {
+    stroke: currentColor;
+  }
+
+  /* Mostrar el check cuando está copiado */
+  .code-block-header span[role="button"][aria-label="Copy"] .with-check {
+    display: none;
+  }
+
+  .code-block-header span[role="button"][aria-label="Copy"].copied .with-check {
+    display: block;
+  }
+
+  .code-block-header span[role="button"][aria-label="Copy"].copied .without-check {
+    display: none;
+  }
+
+  .code-block-line {
+    display: block;
+    min-height: 1.7em;
+  }
+
+  .code-block-line-number {
+    display: inline-block;
+    width: 2.5rem;
+    user-select: none;
+    color: var(--color-muted-foreground);
+    text-align: right;
+    padding-right: 1.5rem;
+  }
+
+  pre {
+    background-color: var(--color-muted);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin: 2rem 0;
+    overflow-x: auto;
+  }
+
+  code {
+    font-family: ui-monospace, "SF Mono", Monaco, "Cascadia Mono", "Segoe UI Mono", "Roboto Mono", Consolas, monospace;
+    font-size: 0.875rem;
+    background-color: var(--color-muted);
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.25rem;
+  }
+
+  pre code {
+    background-color: transparent;
+    padding: 0;
+  }
+
+  p code,
+  li code {
+    font-size: 0.875rem;
+  }
+
+  /* ============================================
+     Custom Prism.js Theme - Minimalist
+     Light & Dark Mode Compatible
+     ============================================ */
+
+  /* Base code styling */
+  code[class*="language-"],
+  pre[class*="language-"] {
+    color: var(--color-foreground);
+    background: none;
+    font-family: ui-monospace, "SF Mono", Monaco, "Cascadia Mono", "Segoe UI Mono", "Roboto Mono", Consolas, monospace;
+    font-size: 0.875rem;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1;
+    tab-size: 2;
+    hyphens: none;
+  }
+
+  pre[class*="language-"] {
+    padding: 1rem;
+    margin: 0;
+    overflow: auto;
+  }
+
+  /* Inline code */
+  :not(pre) > code[class*="language-"] {
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.25rem;
+    background: var(--color-muted);
+  }
+
+  /* Token colors - Light Mode */
+  .token.comment,
+  .token.prolog,
+  .token.doctype,
+  .token.cdata {
+    color: rgb(107, 114, 128); /* gray-500 */
+    font-style: italic;
+  }
+
+  .token.punctuation {
+    color: rgb(75, 85, 99); /* gray-600 */
+  }
+
+  .token.property,
+  .token.tag,
+  .token.boolean,
+  .token.number,
+  .token.constant,
+  .token.symbol,
+  .token.deleted {
+    color: rgb(15, 118, 110); /* teal-700 */
+  }
+
+  .token.selector,
+  .token.attr-name,
+  .token.string,
+  .token.char,
+  .token.builtin,
+  .token.inserted {
+    color: rgb(21, 94, 117); /* cyan-800 */
+  }
+
+  .token.operator,
+  .token.entity,
+  .token.url,
+  .language-css .token.string,
+  .style .token.string {
+    color: rgb(75, 85, 99); /* gray-600 */
+  }
+
+  .token.atrule,
+  .token.attr-value,
+  .token.keyword {
+    color: rgb(88, 28, 135); /* purple-800 */
+    font-weight: 600;
+  }
+
+  .token.function,
+  .token.class-name {
+    color: rgb(30, 64, 175); /* blue-800 */
+  }
+
+  .token.regex,
+  .token.important,
+  .token.variable {
+    color: rgb(55, 65, 81); /* gray-700 */
+  }
+
+  /* Token colors - Dark Mode */
+  .dark .token.comment,
+  .dark .token.prolog,
+  .dark .token.doctype,
+  .dark .token.cdata {
+    color: rgb(100, 116, 139); /* slate-500 */
+  }
+
+  .dark .token.punctuation {
+    color: rgb(148, 163, 184); /* slate-400 */
+  }
+
+  .dark .token.property,
+  .dark .token.tag,
+  .dark .token.boolean,
+  .dark .token.number,
+  .dark .token.constant,
+  .dark .token.symbol,
+  .dark .token.deleted {
+    color: rgb(94, 234, 212); /* teal-300 */
+  }
+
+  .dark .token.selector,
+  .dark .token.attr-name,
+  .dark .token.string,
+  .dark .token.char,
+  .dark .token.builtin,
+  .dark .token.inserted {
+    color: rgb(103, 232, 249); /* cyan-300 */
+  }
+
+  .dark .token.operator,
+  .dark .token.entity,
+  .dark .token.url,
+  .dark .language-css .token.string,
+  .dark .style .token.string {
+    color: rgb(148, 163, 184); /* slate-400 */
+  }
+
+  .dark .token.atrule,
+  .dark .token.attr-value,
+  .dark .token.keyword {
+    color: rgb(216, 180, 254); /* purple-300 */
+    font-weight: 600;
+  }
+
+  .dark .token.function,
+  .dark .token.class-name {
+    color: rgb(147, 197, 253); /* blue-300 */
+  }
+
+  .dark .token.regex,
+  .dark .token.important,
+  .dark .token.variable {
+    color: rgb(203, 213, 225); /* slate-300 */
+  }
+
+  /* Special tokens */
+  .token.important,
+  .token.bold {
+    font-weight: 700;
+  }
+
+  .token.italic {
+    font-style: italic;
+  }
+
+  .token.entity {
+    cursor: help;
+  }
+
+  /* Line highlighting */
+  .line-highlight {
+    background: rgba(107, 114, 128, 0.1);
+    border-left: 3px solid rgb(59, 130, 246);
+    padding-left: 0.75rem;
+    margin-left: -1rem;
+  }
+
+  .dark .line-highlight {
+    background: rgba(148, 163, 184, 0.1);
+    border-left-color: rgb(96, 165, 250);
+  }
+}
+
+
+/* View Transitions API - Animaciones personalizadas */
+
+/* Fade out/in suave para toda la página */
+::view-transition-old(root) {
+  animation: fade-out 0.25s ease-out;
+}
+
+::view-transition-new(root) {
+  animation: fade-in 0.25s ease-in;
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Animación WOW para elementos con view-transition-name */
+/* Los elementos se escalan y hacen crossfade */
+::view-transition-group(*) {
+  animation-duration: 0.5s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+::view-transition-old(*),
+::view-transition-new(*) {
+  animation-duration: 0.5s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
