@@ -149,6 +149,28 @@ export default async function Home({ searchParams }: HomeProps) {
                         <p className="text-sm text-muted-foreground">
                             © {new Date().getFullYear()} agr.codes
                         </p>
+
+                        <p className="text-xs text-muted-foreground/70">
+                            This site is protected by reCAPTCHA and the Google{' '}
+                            <a
+                                href="https://policies.google.com/privacy"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="underline hover:text-foreground transition-colors"
+                            >
+                                Privacy Policy
+                            </a>{' '}
+                            and{' '}
+                            <a
+                                href="https://policies.google.com/terms"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="underline hover:text-foreground transition-colors"
+                            >
+                                Terms of Service
+                            </a>{' '}
+                            apply.
+                        </p>
                     </div>
                 </footer>
             </main>
