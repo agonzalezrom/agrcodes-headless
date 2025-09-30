@@ -10,6 +10,19 @@ export default function robots(): MetadataRoute.Robots {
         allow: '/',
         disallow: ['/api/', '/admin/'],
       },
+      // Allow social media crawlers for Open Graph scraping
+      {
+        userAgent: [
+          'facebookexternalhit',
+          'Facebot',
+          'Twitterbot',
+          'LinkedInBot',
+          'WhatsApp',
+          'Slackbot',
+          'TelegramBot',
+        ],
+        allow: '/',
+      },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,
   }
