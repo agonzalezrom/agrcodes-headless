@@ -1,4 +1,3 @@
-/* v2 - Rebuilt to fix Tailwind processing issues */
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -638,7 +637,7 @@
   .code-block-wrapper code {
     font-family: ui-monospace, "SF Mono", Monaco, "Cascadia Mono", "Segoe UI Mono", "Roboto Mono", Consolas, monospace !important;
     font-size: 0.875rem !important;
-    line-height: 1.1 !important;
+    line-height: 0.3 !important;
     color: var(--color-foreground) !important;
   }
 
@@ -648,21 +647,94 @@
     display: block;
   }
 
-  /* Sobrescribir colores de sintaxis inline */
+  /* Syntax highlighting - GitHub Style */
+  /* Colores inspirados en los temas oficiales de GitHub */
+
+  /* Color base para todos los spans */
   .wp-block-code-block-pro .line span,
   .wp-block-kevinbatdorf-code-block-pro .line span {
-    color: inherit !important;
+    color: #24292f; /* GitHub text default */
   }
 
-  /* Comandos/funciones - teal */
-  .wp-block-code-block-pro .line span:first-child,
-  .wp-block-kevinbatdorf-code-block-pro .line span:first-child {
-    color: rgb(15, 118, 110) !important;
+  /* GitHub Light Theme - aplicar colores de forma alternada */
+  /* Keywords (function, const, let, import, etc) */
+  .wp-block-code-block-pro .line span:nth-child(6n+1),
+  .wp-block-kevinbatdorf-code-block-pro .line span:nth-child(6n+1) {
+    color: #cf222e; /* GitHub red - keywords */
   }
 
-  .dark .wp-block-code-block-pro .line span:first-child,
-  .dark .wp-block-kevinbatdorf-code-block-pro .line span:first-child {
-    color: rgb(94, 234, 212) !important;
+  /* Functions and methods */
+  .wp-block-code-block-pro .line span:nth-child(6n+2),
+  .wp-block-kevinbatdorf-code-block-pro .line span:nth-child(6n+2) {
+    color: #8250df; /* GitHub purple - functions */
+  }
+
+  /* Strings */
+  .wp-block-code-block-pro .line span:nth-child(6n+3),
+  .wp-block-kevinbatdorf-code-block-pro .line span:nth-child(6n+3) {
+    color: #0a3069; /* GitHub blue - strings */
+  }
+
+  /* Numbers and constants */
+  .wp-block-code-block-pro .line span:nth-child(6n+4),
+  .wp-block-kevinbatdorf-code-block-pro .line span:nth-child(6n+4) {
+    color: #0550ae; /* GitHub blue - constants */
+  }
+
+  /* Variables and properties */
+  .wp-block-code-block-pro .line span:nth-child(6n+5),
+  .wp-block-kevinbatdorf-code-block-pro .line span:nth-child(6n+5) {
+    color: #953800; /* GitHub orange - variables */
+  }
+
+  /* Comments and docs */
+  .wp-block-code-block-pro .line span:nth-child(6n+6),
+  .wp-block-kevinbatdorf-code-block-pro .line span:nth-child(6n+6) {
+    color: #57606a; /* GitHub gray - comments */
+    opacity: 0.8;
+  }
+
+  /* GitHub Dark Theme - colores para modo oscuro */
+  .dark .wp-block-code-block-pro .line span,
+  .dark .wp-block-kevinbatdorf-code-block-pro .line span {
+    color: #e6edf3; /* GitHub dark text default */
+  }
+
+  /* Keywords */
+  .dark .wp-block-code-block-pro .line span:nth-child(6n+1),
+  .dark .wp-block-kevinbatdorf-code-block-pro .line span:nth-child(6n+1) {
+    color: #ff7b72; /* GitHub dark red - keywords */
+  }
+
+  /* Functions and methods */
+  .dark .wp-block-code-block-pro .line span:nth-child(6n+2),
+  .dark .wp-block-kevinbatdorf-code-block-pro .line span:nth-child(6n+2) {
+    color: #d2a8ff; /* GitHub dark purple - functions */
+  }
+
+  /* Strings */
+  .dark .wp-block-code-block-pro .line span:nth-child(6n+3),
+  .dark .wp-block-kevinbatdorf-code-block-pro .line span:nth-child(6n+3) {
+    color: #a5d6ff; /* GitHub dark blue - strings */
+  }
+
+  /* Numbers and constants */
+  .dark .wp-block-code-block-pro .line span:nth-child(6n+4),
+  .dark .wp-block-kevinbatdorf-code-block-pro .line span:nth-child(6n+4) {
+    color: #79c0ff; /* GitHub dark blue - constants */
+  }
+
+  /* Variables and properties */
+  .dark .wp-block-code-block-pro .line span:nth-child(6n+5),
+  .dark .wp-block-kevinbatdorf-code-block-pro .line span:nth-child(6n+5) {
+    color: #ffa657; /* GitHub dark orange - variables */
+  }
+
+  /* Comments and docs */
+  .dark .wp-block-code-block-pro .line span:nth-child(6n+6),
+  .dark .wp-block-kevinbatdorf-code-block-pro .line span:nth-child(6n+6) {
+    color: #8b949e; /* GitHub dark gray - comments */
+    opacity: 0.8;
   }
 
   /* Copy button dentro del header */
@@ -788,17 +860,18 @@
     background: var(--color-muted);
   }
 
-  /* Token colors - Light Mode */
+  /* Token colors - Light Mode - Pastel Minimalist */
   .token.comment,
   .token.prolog,
   .token.doctype,
   .token.cdata {
-    color: rgb(107, 114, 128); /* gray-500 */
+    color: rgb(156, 163, 175); /* Pastel gray */
     font-style: italic;
+    opacity: 0.8;
   }
 
   .token.punctuation {
-    color: rgb(75, 85, 99); /* gray-600 */
+    color: rgb(107, 114, 128); /* Soft gray */
   }
 
   .token.property,
@@ -808,7 +881,7 @@
   .token.constant,
   .token.symbol,
   .token.deleted {
-    color: rgb(15, 118, 110); /* teal-700 */
+    color: rgb(168, 85, 247); /* Pastel purple */
   }
 
   .token.selector,
@@ -817,7 +890,7 @@
   .token.char,
   .token.builtin,
   .token.inserted {
-    color: rgb(21, 94, 117); /* cyan-800 */
+    color: rgb(251, 146, 60); /* Pastel orange */
   }
 
   .token.operator,
@@ -825,37 +898,38 @@
   .token.url,
   .language-css .token.string,
   .style .token.string {
-    color: rgb(75, 85, 99); /* gray-600 */
+    color: rgb(139, 92, 246); /* Soft violet */
   }
 
   .token.atrule,
   .token.attr-value,
   .token.keyword {
-    color: rgb(88, 28, 135); /* purple-800 */
-    font-weight: 600;
+    color: rgb(236, 72, 153); /* Pastel pink */
+    font-weight: 500;
   }
 
   .token.function,
   .token.class-name {
-    color: rgb(30, 64, 175); /* blue-800 */
+    color: rgb(59, 130, 246); /* Pastel blue */
   }
 
   .token.regex,
   .token.important,
   .token.variable {
-    color: rgb(55, 65, 81); /* gray-700 */
+    color: rgb(34, 197, 94); /* Pastel green */
   }
 
-  /* Token colors - Dark Mode */
+  /* Token colors - Dark Mode - Pastel Minimalist */
   .dark .token.comment,
   .dark .token.prolog,
   .dark .token.doctype,
   .dark .token.cdata {
-    color: rgb(100, 116, 139); /* slate-500 */
+    color: rgb(148, 163, 184); /* Soft slate */
+    opacity: 0.7;
   }
 
   .dark .token.punctuation {
-    color: rgb(148, 163, 184); /* slate-400 */
+    color: rgb(148, 163, 184); /* Soft slate */
   }
 
   .dark .token.property,
@@ -865,7 +939,7 @@
   .dark .token.constant,
   .dark .token.symbol,
   .dark .token.deleted {
-    color: rgb(94, 234, 212); /* teal-300 */
+    color: rgb(196, 181, 253); /* Pastel purple light */
   }
 
   .dark .token.selector,
@@ -874,7 +948,7 @@
   .dark .token.char,
   .dark .token.builtin,
   .dark .token.inserted {
-    color: rgb(103, 232, 249); /* cyan-300 */
+    color: rgb(253, 186, 116); /* Pastel orange light */
   }
 
   .dark .token.operator,
@@ -882,25 +956,25 @@
   .dark .token.url,
   .dark .language-css .token.string,
   .dark .style .token.string {
-    color: rgb(148, 163, 184); /* slate-400 */
+    color: rgb(167, 139, 250); /* Soft violet light */
   }
 
   .dark .token.atrule,
   .dark .token.attr-value,
   .dark .token.keyword {
-    color: rgb(216, 180, 254); /* purple-300 */
-    font-weight: 600;
+    color: rgb(244, 114, 182); /* Pastel pink light */
+    font-weight: 500;
   }
 
   .dark .token.function,
   .dark .token.class-name {
-    color: rgb(147, 197, 253); /* blue-300 */
+    color: rgb(96, 165, 250); /* Pastel blue light */
   }
 
   .dark .token.regex,
   .dark .token.important,
   .dark .token.variable {
-    color: rgb(203, 213, 225); /* slate-300 */
+    color: rgb(134, 239, 172); /* Pastel green light */
   }
 
   /* Special tokens */
