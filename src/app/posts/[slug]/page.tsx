@@ -2,6 +2,7 @@ import Link from "next/link"
 import type {Metadata} from "next"
 import {notFound} from "next/navigation"
 import { ViewTransition } from "react"
+import { cacheLife } from "next/cache"
 
 import {ThemeToggle} from "@/components/theme-toggle"
 import {CodeBlock} from "@/components/code-block"
@@ -11,9 +12,6 @@ import {calculateReadingTime} from "@/lib/utils"
 export async function generateStaticParams() {
     return await getAllPostSlugs()
 }
-
-export const dynamicParams = true
-export const revalidate = 3600
 
 export async function generateMetadata({params}: { params: Promise<{slug: string }>}): Promise<Metadata> {
 
@@ -70,6 +68,8 @@ export async function generateMetadata({params}: { params: Promise<{slug: string
 }
 
 export default async function PostPage({params}: { params: Promise<{ slug: string }> }) {
+    'use cache'
+    cacheLife('hours')
 
     const { slug } = await params
     const post = await getPostBySlug(slug)

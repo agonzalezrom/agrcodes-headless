@@ -14,14 +14,12 @@ export function NewsletterForm() {
         setStatus('loading')
 
         try {
-            // Verificar ReCAPTCHA primero
             if (!executeRecaptcha) {
                 throw new Error('ReCAPTCHA not available')
             }
 
             const token = await executeRecaptcha('newsletter_subscribe')
 
-            // Validar el token con nuestro API route
             const verifyResponse = await fetch('/api/verify-recaptcha', {
                 method: 'POST',
                 headers: {

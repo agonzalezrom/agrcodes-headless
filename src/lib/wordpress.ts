@@ -24,7 +24,11 @@ const WORDPRESS_API_URL = process.env.NEXT_PUBLIC_WORDPRESS_URL
 export async function getTotalPosts(): Promise<number> {
   try {
     const response = await fetch(
-      `${WORDPRESS_API_URL}/posts?per_page=1&status=publish`
+      `${WORDPRESS_API_URL}/posts?per_page=1&status=publish`,
+      {
+        cache: 'force-cache',
+        next: { revalidate: 3600 } // Revalidate every hour
+      }
     )
 
     if (!response.ok) {
@@ -50,7 +54,11 @@ export async function getTotalPosts(): Promise<number> {
 export async function getPosts(page: number = 1, perPage: number = 10): Promise<Post[]> {
   try {
     const response = await fetch(
-      `${WORDPRESS_API_URL}/posts?_embed&page=${page}&per_page=${perPage}&status=publish`
+      `${WORDPRESS_API_URL}/posts?_embed&page=${page}&per_page=${perPage}&status=publish`,
+      {
+        cache: 'force-cache',
+        next: { revalidate: 3600 } // Revalidate every hour
+      }
     )
 
     if (!response.ok) {
@@ -75,7 +83,11 @@ export async function getPosts(page: number = 1, perPage: number = 10): Promise<
 export async function getPostBySlug(slug: string): Promise<Post | null> {
   try {
     const response = await fetch(
-      `${WORDPRESS_API_URL}/posts?slug=${slug}&_embed`
+      `${WORDPRESS_API_URL}/posts?slug=${slug}&_embed`,
+      {
+        cache: 'force-cache',
+        next: { revalidate: 3600 } // Revalidate every hour
+      }
     )
 
     if (!response.ok) {
@@ -103,7 +115,11 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
 export async function getAllPostSlugs(): Promise<{ slug: string }[]> {
   try {
     const response = await fetch(
-      `${WORDPRESS_API_URL}/posts?per_page=100&_fields=slug`
+      `${WORDPRESS_API_URL}/posts?per_page=100&_fields=slug&status=publish`,
+      {
+        cache: 'force-cache',
+        next: { revalidate: 3600 } // Revalidate every hour
+      }
     )
 
     if (!response.ok) {

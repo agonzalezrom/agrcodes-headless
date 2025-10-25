@@ -1,18 +1,20 @@
 # Headless WordPress Blog - agr.codes
 
 [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Next.js](https://img.shields.io/badge/Next.js-15.5.4-black)](https://nextjs.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-16.0.0-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.2-blue)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.1.13-38bdf8)](https://tailwindcss.com/)
 
-> A minimalist, SEO-optimized headless WordPress blog built with Next.js 15, TypeScript, and Tailwind CSS v4. Inspired by the clean and elegant design of world.hey.com.
+> A minimalist, SEO-optimized headless WordPress blog built with Next.js 16, TypeScript, and Tailwind CSS v4. Features Partial Prerendering (PPR) with Cache Components for optimal performance. Inspired by the clean and elegant design of world.hey.com.
 
 ## ✨ Features
 
 ### Core
-- ✅ **Hybrid Rendering** - SSG for posts + Dynamic rendering for home + ISR
+- ✅ **Partial Prerendering (PPR)** - Next.js 16 Cache Components for optimal performance
+- ✅ **Granular Caching** - `'use cache'` + `cacheLife()` for selective component caching
+- ✅ **Hybrid Rendering** - SSG for posts + Dynamic rendering for home + Streaming
 - ✅ **View Transitions API** - Smooth animations between pages
-- ✅ **SEO Optimized** - Sitemap, RSS feed, JSON-LD, robots.txt
+- ✅ **SEO Optimized** - Sitemap, RSS feed, JSON-LD, robots.txt, Open Graph images
 - ✅ **Reading Time** - Automatic calculation per post
 - ✅ **Dark/Light Mode** - Theme toggle with persistence
 - ✅ **Pagination** - Navigate through posts
@@ -96,13 +98,16 @@ RECAPTCHA_SECRET_KEY=your_secret_key_here
 
 | Category | Technology |
 |----------|-----------|
-| Framework | Next.js 15.5.4 (App Router) |
+| Framework | Next.js 16.0.0 (App Router) |
+| Rendering | Partial Prerendering (PPR) + Cache Components |
 | Language | TypeScript 5.9.2 |
 | Styling | Tailwind CSS v4.1.13 |
 | Font | DM Sans (Google Fonts) |
 | State | React 19.1.1 Server Components |
+| UI Components | shadcn/ui (Skeleton) |
 | Theme | next-themes |
 | Security | Google ReCAPTCHA v3 |
+| Performance | Turbopack, HTML minification |
 
 ### Project Structure
 
@@ -283,6 +288,38 @@ WordPress HTML goes through a pipeline:
 2. **Code Block Pro** - Restructure and clean syntax highlighting
 3. **Style Cleanup** - Remove inline styles and color attributes
 4. **Minification** - Reduce size while preserving code blocks
+
+### 7. Next.js 16 Cache Components (PPR)
+
+Implements Partial Prerendering for optimal performance:
+
+**Architecture:**
+- **Server Components with `'use cache'`** - `PostsList` component caches for hours
+- **Granular Caching** - `cacheLife('hours')` replaces old `revalidate` option
+- **Suspense Boundaries** - Separates dynamic from static content
+- **Streaming Responses** - Dynamic parts render while static shell sends immediately
+
+**Components:**
+- `PostsList` - Cacheable server component for rendering posts
+- `PostsListSkeleton` - Loading state with shadcn/ui Skeleton
+- `SearchContentWrapper` - Handles dynamic search params
+- `NewsletterForm` - In its own Suspense boundary
+- `ReCaptchaProvider` - Split into Server + Client components
+- `CurrentYear` - Client component to avoid time-based blocking
+
+**Configuration:**
+```typescript
+// next.config.mjs
+const nextConfig = {
+  cacheComponents: true,
+}
+```
+
+**Benefits:**
+- ⚡ Fast initial page load with skeleton placeholders
+- 📊 Streaming renders dynamic content in parallel
+- 💾 Selective caching reduces server load
+- 🔄 No `revalidate` conflicts with PPR
 
 ---
 
@@ -551,5 +588,5 @@ You are free to:
 
 **Built with ❤️ by Alejandro González Romero**
 
-**Last updated**: September 30, 2025
-**Version**: 1.0.0
+**Last updated**: October 25, 2025
+**Version**: 1.1.0 - Next.js 16 with Partial Prerendering (PPR) and Cache Components

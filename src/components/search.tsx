@@ -304,15 +304,6 @@ export function Search({ posts }: SearchProps) {
               No se encontraron resultados para "{query}"
             </div>
           )}
-
-          {/* Keyboard hints */}
-          {results.length > 0 && (
-            <div className="px-4 py-2 border-t border-border bg-muted/30 text-xs text-muted-foreground flex items-center justify-between">
-              <span>↑↓ navegar</span>
-              <span>Enter abrir</span>
-              <span>Esc cerrar</span>
-            </div>
-          )}
         </div>
       )}
     </div>

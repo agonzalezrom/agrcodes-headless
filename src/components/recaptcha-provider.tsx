@@ -1,8 +1,6 @@
-'use client'
+import { ReCaptchaProviderClient } from './recaptcha-provider-client'
 
-import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3'
-
-export function ReCaptchaProvider({ children }: { children: React.ReactNode }) {
+export async function ReCaptchaProvider({ children }: { children: React.ReactNode }) {
   const recaptchaKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY
 
   if (!recaptchaKey) {
@@ -11,15 +9,8 @@ export function ReCaptchaProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <GoogleReCaptchaProvider
-      reCaptchaKey={recaptchaKey}
-      scriptProps={{
-        async: true,
-        defer: true,
-        appendTo: 'head',
-      }}
-    >
+    <ReCaptchaProviderClient reCaptchaKey={recaptchaKey}>
       {children}
-    </GoogleReCaptchaProvider>
+    </ReCaptchaProviderClient>
   )
 }

@@ -1,31 +1,48 @@
-import Link from "next/link"
-import { ViewTransition } from "react"
+import { Suspense } from "react"
 
 import {ThemeToggle} from "@/components/theme-toggle"
 import {NewsletterForm} from "@/components/newsletter-form"
 import {Search} from "@/components/search"
-import {getPosts, getTotalPosts} from "@/lib/wordpress"
-
-export const dynamic = 'force-dynamic'
+import {PostsList} from "@/components/posts-list"
+import {PostsListSkeleton} from "@/components/posts-list-skeleton"
+import {CurrentYear} from "@/components/current-year"
+import {getPosts} from "@/lib/wordpress"
 
 interface HomeProps {
     searchParams: Promise<{ page?: string }>
 }
 
-export default async function Home({ searchParams }: HomeProps) {
-
+async function SearchContentWrapper({ searchParams }: HomeProps) {
     const { page } = await searchParams
     const currentPage = Number(page) || 1
     const postsPerPage = 10
+    const posts = await getPosts(currentPage, postsPerPage)
+    return { posts, currentPage, postsPerPage }
+}
 
-    const [posts, totalPosts] = await Promise.all([
-        getPosts(currentPage, postsPerPage),
-        getTotalPosts()
-    ])
+function SearchWithFallback({ posts }: { posts: any[] }) {
+    return <Search posts={posts} />
+}
 
-    const totalPages = Math.ceil(totalPosts / postsPerPage)
-    const hasNextPage = currentPage < totalPages
-    const hasPrevPage = currentPage > 1
+async function HomeContentWithSearch({ searchParams }: HomeProps) {
+    const { posts, currentPage, postsPerPage } = await SearchContentWrapper({ searchParams })
+
+    return (
+        <>
+            <div className="mb-12 md:mb-16">
+                <h1 className="text-3xl md:text-4xl font-bold mb-3">agr.codes</h1>
+                <p className="text-muted-foreground text-lg md:text-xl mb-8">By Alejandro González Romero</p>
+                <SearchWithFallback posts={posts} />
+            </div>
+
+            <Suspense fallback={<PostsListSkeleton />}>
+                <PostsList currentPage={currentPage} postsPerPage={postsPerPage} />
+            </Suspense>
+        </>
+    )
+}
+
+export default async function Home({ searchParams }: HomeProps) {
 
     return (
         <div className="min-h-screen">
@@ -36,68 +53,15 @@ export default async function Home({ searchParams }: HomeProps) {
             </nav>
 
             <main className="max-w-5xl mx-auto px-6 py-16 md:py-24">
-                <div className="mb-12 md:mb-16">
-                    <h1 className="text-3xl md:text-4xl font-bold mb-3">agr.codes</h1>
-                    <p className="text-muted-foreground text-lg md:text-xl mb-8">By Alejandro González Romero</p>
-                    <Search posts={posts} />
-                </div>
-
-                <div className="space-y-12 md:space-y-16">
-                    {posts.length > 0 ? (
-                        posts.map((post) => (
-                            <article key={post.id} className="group cursor-pointer">
-                                <Link href={`/posts/${post.slug}`} className="block no-underline">
-                                    <ViewTransition name={`post-date-${post.slug}`}>
-                                        <time className="text-sm text-muted-foreground block mb-3 underline">
-                                            {post.date}
-                                        </time>
-                                    </ViewTransition>
-                                    <ViewTransition name={`post-title-${post.slug}`}>
-                                        <h2 className="text-2xl md:text-3xl font-bold mb-4 leading-tight transition-colors group-hover:text-foreground/80 inline-block">
-                                            {post.title}
-                                        </h2>
-                                    </ViewTransition>
-                                    <p className="text-lg text-muted-foreground leading-relaxed no-underline" dangerouslySetInnerHTML={{__html: post.excerpt}}></p>
-                                </Link>
-                            </article>
-                        ))
-                    ) : (
-                        <div className="text-center py-12">
-                            <p className="text-muted-foreground">No se encontraron posts. Configura tu URL de WordPress
-                                en .env.local</p>
-                        </div>
-                    )}
-                </div>
-
-                {totalPages > 1 && (
-                    <div className="mt-16 flex items-center justify-center gap-4">
-                        {hasPrevPage && (
-                            <Link
-                                href={currentPage === 2 ? '/' : `/?page=${currentPage - 1}`}
-                                className="px-4 py-2 rounded-lg border border-border hover:bg-muted transition-colors"
-                            >
-                                ← Anterior
-                            </Link>
-                        )}
-
-                        <span className="text-sm text-muted-foreground">
-                            Página {currentPage} de {totalPages}
-                        </span>
-
-                        {hasNextPage && (
-                            <Link
-                                href={`/?page=${currentPage + 1}`}
-                                className="px-4 py-2 rounded-lg border border-border hover:bg-muted transition-colors"
-                            >
-                                Siguiente →
-                            </Link>
-                        )}
-                    </div>
-                )}
+                <Suspense fallback={<div className="space-y-8"><div className="h-10 bg-muted rounded animate-pulse" /><PostsListSkeleton /></div>}>
+                    <HomeContentWithSearch searchParams={searchParams} />
+                </Suspense>
 
                 <footer className="mt-24 md:mt-32 pt-12 border-t space-y-8">
 
-                    <NewsletterForm/>
+                    <Suspense fallback={<div className="h-12 bg-muted rounded-lg animate-pulse" />}>
+                        <NewsletterForm/>
+                    </Suspense>
 
                     <div className="text-center space-y-4">
                         <p className="text-muted-foreground italic">
@@ -145,7 +109,7 @@ export default async function Home({ searchParams }: HomeProps) {
                         </p>
 
                         <p className="text-sm text-muted-foreground">
-                            © {new Date().getFullYear()} agr.codes
+                            © <Suspense fallback="2025"><CurrentYear /></Suspense> agr.codes
                         </p>
 
                         <p className="text-xs text-muted-foreground/70">

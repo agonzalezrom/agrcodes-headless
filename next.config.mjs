@@ -15,6 +15,7 @@ const nextConfig = {
   experimental: {
     viewTransition: true,
   },
+  cacheComponents: true,
 }
 
 export default nextConfig
