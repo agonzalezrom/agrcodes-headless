@@ -1,22 +1,19 @@
 import Link from "next/link"
 import type {Metadata} from "next"
 import {notFound} from "next/navigation"
-import {unstable_ViewTransition as ViewTransition} from "react"
+import { ViewTransition } from "react"
 
 import {ThemeToggle} from "@/components/theme-toggle"
 import {CodeBlock} from "@/components/code-block"
 import {getPostBySlug, getAllPostSlugs} from "@/lib/wordpress"
 import {calculateReadingTime} from "@/lib/utils"
 
-// Generar páginas estáticas para todos los posts en build time
 export async function generateStaticParams() {
     return await getAllPostSlugs()
 }
 
-// Estrategia: generar estáticamente todos los posts conocidos,
-// y regenerar bajo demanda si se crea un post nuevo (ISR)
-export const dynamicParams = true // Permitir generación de nuevos posts bajo demanda
-export const revalidate = 3600 // Revalidar cada hora (ajustable)
+export const dynamicParams = true
+export const revalidate = 3600
 
 export async function generateMetadata({params}: { params: Promise<{slug: string }>}): Promise<Metadata> {
 
