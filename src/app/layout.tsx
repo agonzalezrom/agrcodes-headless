@@ -1,9 +1,10 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { DM_Sans } from "next/font/google"
+import { SpeedInsights } from "@vercel/speed-insights/next"
+
 import { ReCaptchaProvider } from "@/components/recaptcha-provider"
 import "./globals.css"
-
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -62,6 +63,7 @@ export default function RootLayout({
         <ReCaptchaProvider>
           {children}
         </ReCaptchaProvider>
+        <SpeedInsights />
       </body>
     </html>
   )
