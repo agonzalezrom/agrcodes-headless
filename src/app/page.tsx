@@ -1,13 +1,11 @@
 import Link from "next/link"
-import {unstable_ViewTransition as ViewTransition} from "react"
+import { ViewTransition } from "react"
 
 import {ThemeToggle} from "@/components/theme-toggle"
 import {NewsletterForm} from "@/components/newsletter-form"
 import {Search} from "@/components/search"
 import {getPosts, getTotalPosts} from "@/lib/wordpress"
 
-// Forzar dynamic rendering para esta página
-// Permite que el home use API routes y se regenere en cada request
 export const dynamic = 'force-dynamic'
 
 interface HomeProps {
@@ -59,7 +57,7 @@ export default async function Home({ searchParams }: HomeProps) {
                                             {post.title}
                                         </h2>
                                     </ViewTransition>
-                                    <p className="text-lg text-muted-foreground leading-relaxed">{post.excerpt}</p>
+                                    <p className="text-lg text-muted-foreground leading-relaxed no-underline" dangerouslySetInnerHTML={{__html: post.excerpt}}></p>
                                 </Link>
                             </article>
                         ))
@@ -71,7 +69,6 @@ export default async function Home({ searchParams }: HomeProps) {
                     )}
                 </div>
 
-                {/* Paginación */}
                 {totalPages > 1 && (
                     <div className="mt-16 flex items-center justify-center gap-4">
                         {hasPrevPage && (
@@ -99,6 +96,7 @@ export default async function Home({ searchParams }: HomeProps) {
                 )}
 
                 <footer className="mt-24 md:mt-32 pt-12 border-t space-y-8">
+
                     <NewsletterForm/>
 
                     <div className="text-center space-y-4">
