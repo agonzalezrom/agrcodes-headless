@@ -45,10 +45,10 @@ export default async function Home({ searchParams }: HomeProps) {
                 <div className="space-y-12 md:space-y-16">
                     {posts.length > 0 ? (
                         posts.map((post) => (
-                            <article key={post.id} className="group">
-                                <Link href={`/posts/${post.slug}`} className="block">
+                            <article key={post.id} className="group cursor-pointer">
+                                <Link href={`/posts/${post.slug}`} className="block no-underline">
                                     <ViewTransition name={`post-date-${post.slug}`}>
-                                        <time className="text-sm text-muted-foreground block mb-3">
+                                        <time className="text-sm text-muted-foreground block mb-3 underline">
                                             {post.date}
                                         </time>
                                     </ViewTransition>
