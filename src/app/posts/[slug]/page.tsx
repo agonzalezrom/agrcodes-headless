@@ -20,15 +20,15 @@ export async function generateMetadata({params}: { params: Promise<{slug: string
 
     if (!post) {
         return {
-            title: 'Post no encontrado - agr.codes',
+            title: 'Post no encontrado - agrcodes.com',
         }
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://agr.codes'
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://agrcodes.com'
     const postUrl = `${baseUrl}/posts/${post.slug}`
 
     return {
-        title: `${post.seo?.title || post.title} - agr.codes`,
+        title: `${post.seo?.title || post.title} - agrcodes.com`,
         description: post.seo?.description || post.excerpt,
         authors: [{name: post.author.name}],
         keywords: post.tags?.join(', '),
@@ -78,7 +78,7 @@ export default async function PostPage({params}: { params: Promise<{ slug: strin
         notFound()
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://agr.codes'
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://agrcodes.com'
     const postUrl = `${baseUrl}/posts/${post.slug}`
     const readingTime = calculateReadingTime(post.content)
 

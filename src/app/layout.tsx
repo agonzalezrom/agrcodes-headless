@@ -15,35 +15,35 @@ const dmSans = DM_Sans({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://agr.codes'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://agrcodes.com'),
   title: {
-    default: "agr.codes - Alejandro González Romero",
-    template: "%s - agr.codes",
+    default: "agrcodes.com - Alejandro González Romero",
+    template: "%s - agrcodes.com",
   },
-  description: "Reflexiones sobre desarrollo web, diseño y tecnología por Alejandro González Romero",
-  authors: [{ name: "Alejandro González Romero", url: "https://agr.codes" }],
+  description: "Reflexiones, software y ciencia ficción en un mismo universo por Alejandro González Romero",
+  authors: [{ name: "Alejandro González Romero", url: "https://agrcodes.com" }],
   creator: "Alejandro González Romero",
   publisher: "Alejandro González Romero",
   openGraph: {
     type: "website",
     locale: "es_MX",
-    url: "https://agr.codes",
-    siteName: "agr.codes",
-    title: "agr.codes - Alejandro González Romero",
-    description: "Reflexiones sobre desarrollo web, cosmos y tecnología",
+    url: "https://agrcodes.com",
+    siteName: "agr codes",
+    title: "agrcodes.com - Alejandro González Romero",
+    description: "Reflexiones, software y ciencia ficción en un mismo universo.",
     images: [
       {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "agr.codes - Alejandro González Romero",
+        alt: "agrcodes.com - Alejandro González Romero",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "agr.codes - Alejandro González Romero",
-    description: "Reflexiones sobre desarrollo web, diseño y tecnología",
+    title: "agrcodes.com - Alejandro González Romero",
+    description: "Reflexiones, software y ciencia ficción en un mismo universo.",
     creator: "@agonzalezrom",
     images: ["/og-image.jpg"],
   },
