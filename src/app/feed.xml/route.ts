@@ -3,7 +3,7 @@ import { getPosts } from '@/lib/wordpress'
 import { stripHtml } from '@/lib/utils'
 
 export async function GET() {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://agr.codes'
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://agrcodes.com'
   const posts = await getPosts(1, 50) // Top 50 posts para RSS
 
   const rss = `<?xml version="1.0" encoding="UTF-8" ?>
@@ -11,7 +11,7 @@ export async function GET() {
   <channel>
     <title>agr.codes</title>
     <link>${baseUrl}</link>
-    <description>Reflexiones sobre desarrollo web, diseño y tecnología por Alejandro González Romero</description>
+    <description>Reflexiones, software y ciencia ficción en un mismo universo por Alejandro González Romero</description>
     <language>es-MX</language>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
     <atom:link href="${baseUrl}/feed.xml" rel="self" type="application/rss+xml" />

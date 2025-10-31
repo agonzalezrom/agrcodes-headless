@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next'
 import { getAllPostSlugs } from '@/lib/wordpress'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://agr.codes'
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://agrcodes.com'
 
   // Obtener todos los posts
   const posts = await getAllPostSlugs()
