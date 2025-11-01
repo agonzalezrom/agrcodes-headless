@@ -20,9 +20,6 @@ const nextConfig = {
       },
     ],
   },
-  experimental: {
-    viewTransition: true,
-  },
   cacheComponents: true,
 }
 

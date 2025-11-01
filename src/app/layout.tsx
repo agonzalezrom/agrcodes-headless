@@ -1,5 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
+import { Suspense } from "react"
 import { DM_Sans } from "next/font/google"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from "@vercel/analytics/next"
@@ -56,7 +57,7 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
@@ -70,9 +71,11 @@ export default function RootLayout({
         <link rel="manifest" href="/site.webmanifest" />
       </head>
       <body className="font-sans antialiased">
-        <ReCaptchaProvider>
-          {children}
-        </ReCaptchaProvider>
+        <Suspense>
+          <ReCaptchaProvider>
+            {children}
+          </ReCaptchaProvider>
+        </Suspense>
         <SpeedInsights />
         <Analytics />
       </body>
