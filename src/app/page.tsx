@@ -109,7 +109,7 @@ export default async function Home({ searchParams }: HomeProps) {
                         </p>
 
                         <p className="text-sm text-muted-foreground">
-                            © <Suspense fallback="2025"><CurrentYear /></Suspense> agr.codes
+                            © <Suspense fallback="2025"><CurrentYear /></Suspense> agrcodes.com
                         </p>
 
                         <p className="text-xs text-muted-foreground/70">
