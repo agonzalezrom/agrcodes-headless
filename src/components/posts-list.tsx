@@ -1,7 +1,7 @@
 'use cache'
 
 import Link from "next/link"
-import { ViewTransition } from "react"
+import Image from "next/image"
 import { getPosts, getTotalPosts } from "@/lib/wordpress"
 
 interface PostsListProps {
@@ -21,22 +21,54 @@ export async function PostsList({ currentPage, postsPerPage }: PostsListProps) {
 
   return (
     <>
-      <div className="space-y-12 md:space-y-16">
+      <div className="space-y-3 md:space-y-4">
         {posts.length > 0 ? (
           posts.map((post) => (
             <article key={post.id} className="group cursor-pointer">
-              <Link href={`/posts/${post.slug}`} className="block no-underline">
-                <ViewTransition name={`post-date-${post.slug}`}>
-                  <time className="text-sm text-muted-foreground block mb-3 underline">
-                    {post.date}
-                  </time>
-                </ViewTransition>
-                <ViewTransition name={`post-title-${post.slug}`}>
-                  <h2 className="text-2xl md:text-3xl font-bold mb-4 leading-tight transition-colors group-hover:text-foreground/80 inline-block">
-                    {post.title}
-                  </h2>
-                </ViewTransition>
-                <p className="text-lg text-muted-foreground leading-relaxed no-underline" dangerouslySetInnerHTML={{__html: post.excerpt}}></p>
+              <Link href={`/posts/${post.slug}`} className="block">
+                {/* Background with featured image - subtle gradient effect */}
+                {post.featuredImage && (
+                  <div className="relative -mx-6 px-6 mb-6 md:-mx-8 md:px-8 rounded-lg overflow-hidden">
+                    {/* Background image with subtle opacity */}
+                    <div className="absolute inset-0 opacity-25">
+                      <Image
+                        src={post.featuredImage.url}
+                        alt={post.featuredImage.alt}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) calc(100vw - 48px), (max-width: 1280px) calc(100vw - 64px), 100%"
+                        loading="lazy"
+                      />
+                    </div>
+
+                    {/* Dark gradient overlay for better text readability */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-background/60"></div>
+
+                    {/* Content with relative positioning */}
+                    <div className="relative py-6 md:py-8">
+                      <time className="text-sm text-muted-foreground block mb-3 underline">
+                        {post.date}
+                      </time>
+                      <h2 className="text-2xl md:text-3xl font-bold mb-4 leading-tight transition-colors group-hover:text-foreground/80 inline-block">
+                        {post.title}
+                      </h2>
+                      <p className="text-lg text-muted-foreground leading-relaxed no-underline line-clamp-2" dangerouslySetInnerHTML={{__html: post.excerpt}}></p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Content without featured image */}
+                {!post.featuredImage && (
+                  <>
+                    <time className="text-sm text-muted-foreground block mb-3 underline">
+                      {post.date}
+                    </time>
+                    <h2 className="text-2xl md:text-3xl font-bold mb-4 leading-tight transition-colors group-hover:text-foreground/80 inline-block">
+                      {post.title}
+                    </h2>
+                    <p className="text-lg text-muted-foreground leading-relaxed no-underline" dangerouslySetInnerHTML={{__html: post.excerpt}}></p>
+                  </>
+                )}
               </Link>
             </article>
           ))

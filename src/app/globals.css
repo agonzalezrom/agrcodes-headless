@@ -124,11 +124,11 @@
   h6:hover {
     background: linear-gradient(
       90deg,
-      rgb(239, 68, 68) 0%,
-      rgb(249, 115, 22) 25%,
-      rgb(234, 179, 8) 50%,
-      rgb(34, 197, 94) 75%,
-      rgb(59, 130, 246) 100%
+      rgb(34, 197, 94) 0%,
+      rgb(16, 185, 129) 25%,
+      rgb(6, 182, 212) 50%,
+      rgb(59, 130, 246) 75%,
+      rgb(34, 197, 94) 100%
     );
     background-size: 200% 100%;
     background-clip: text;
@@ -1067,47 +1067,6 @@
 }
 
 
-/* View Transitions API - Animaciones personalizadas */
-
-/* Fade out/in suave para toda la página */
-::view-transition-old(root) {
-  animation: fade-out 0.25s ease-out;
-}
-
-::view-transition-new(root) {
-  animation: fade-in 0.25s ease-in;
-}
-
-@keyframes fade-out {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-/* Animación WOW para elementos con view-transition-name */
-/* Los elementos se escalan y hacen crossfade */
-::view-transition-group(*) {
-  animation-duration: 0.5s;
-  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-::view-transition-old(*),
-::view-transition-new(*) {
-  animation-duration: 0.5s;
-  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
 
 /* Hide reCAPTCHA v3 badge */
 .grecaptcha-badge {

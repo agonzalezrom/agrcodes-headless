@@ -1,5 +1,4 @@
 import { Suspense } from "react"
-
 import {ThemeToggle} from "@/components/theme-toggle"
 import {NewsletterForm} from "@/components/newsletter-form"
 import {Search} from "@/components/search"
@@ -12,37 +11,13 @@ interface HomeProps {
     searchParams: Promise<{ page?: string }>
 }
 
-async function SearchContentWrapper({ searchParams }: HomeProps) {
+export default async function Home({ searchParams }: HomeProps) {
     const { page } = await searchParams
     const currentPage = Number(page) || 1
     const postsPerPage = 10
-    const posts = await getPosts(currentPage, postsPerPage)
-    return { posts, currentPage, postsPerPage }
-}
 
-function SearchWithFallback({ posts }: { posts: any[] }) {
-    return <Search posts={posts} />
-}
-
-async function HomeContentWithSearch({ searchParams }: HomeProps) {
-    const { posts, currentPage, postsPerPage } = await SearchContentWrapper({ searchParams })
-
-    return (
-        <>
-            <div className="mb-12 md:mb-16">
-                <h1 className="text-3xl md:text-4xl font-bold mb-3">agr.codes</h1>
-                <p className="text-muted-foreground text-lg md:text-xl mb-8">By Alejandro González Romero</p>
-                <SearchWithFallback posts={posts} />
-            </div>
-
-            <Suspense fallback={<PostsListSkeleton />}>
-                <PostsList currentPage={currentPage} postsPerPage={postsPerPage} />
-            </Suspense>
-        </>
-    )
-}
-
-export default async function Home({ searchParams }: HomeProps) {
+    // Fetch all posts for search component (client-side search)
+    const allPosts = await getPosts(1, 100)
 
     return (
         <div className="min-h-screen">
@@ -53,8 +28,14 @@ export default async function Home({ searchParams }: HomeProps) {
             </nav>
 
             <main className="max-w-5xl mx-auto px-6 py-16 md:py-24">
-                <Suspense fallback={<div className="space-y-8"><div className="h-10 bg-muted rounded animate-pulse" /><PostsListSkeleton /></div>}>
-                    <HomeContentWithSearch searchParams={searchParams} />
+                <div className="mb-12 md:mb-16">
+                    <h1 className="text-3xl md:text-4xl font-bold mb-3">agrcodes.com</h1>
+                    <p className="text-muted-foreground text-lg md:text-xl mb-8">By Alejandro González Romero</p>
+                    <Search posts={allPosts} />
+                </div>
+
+                <Suspense fallback={<PostsListSkeleton />}>
+                    <PostsList currentPage={currentPage} postsPerPage={postsPerPage} />
                 </Suspense>
 
                 <footer className="mt-24 md:mt-32 pt-12 border-t space-y-8">

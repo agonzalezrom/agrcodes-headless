@@ -128,22 +128,38 @@ export function processWordPressContent(html: string): string {
         .replace(/\s*style="[^"]*"/gi, '')
         .replace(/\s*data-code-block-pro-font-family="[^"]*"/gi, '')
 
-      // Detectar el lenguaje del código
-      let language = 'Code'
-      const fontMatch = match.match(/data-code-block-pro-font-family="[^"]*"/i)
-      if (fontMatch) {
-        language = fontMatch[0].replace(/data-code-block-pro-font-family="|"/g, '')
-          .replace('Code-Pro-', '')
-          .replace(/-/g, ' ')
+      // Extraer el título personalizado si existe (está en un span con border-bottom)
+      let customTitle = ''
+      const titleMatch = content.match(/<span[^>]*style="[^"]*border-bottom[^"]*"[^>]*>([^<]+)<\/span>/)
+      if (titleMatch && titleMatch[1]) {
+        customTitle = titleMatch[1].trim()
+          .replace(/&#8220;/g, '"') // Decodificar entidades comunes
+          .replace(/&#8221;/g, '"')
+          .replace(/&#8211;/g, '–')
+          .replace(/&#8212;/g, '—')
+          .replace(/&#\d+;/g, '') // Limpiar otras entidades si las hay
       }
 
-      // Detectar del contenido
-      if (content.includes('git ')) language = 'Bash'
-      else if (content.includes('npm ') || content.includes('pnpm ')) language = 'Shell'
-      else if (content.includes('function') || content.includes('const ')) language = 'JavaScript'
-      else if (content.includes('interface') || content.includes('type ')) language = 'TypeScript'
-      else if (content.includes('<?php')) language = 'PHP'
-      else if (content.includes('def ') || content.includes('import ')) language = 'Python'
+      // Si hay título personalizado, usarlo. Si no, detectar el lenguaje
+      let language = customTitle || 'Code'
+
+      if (!customTitle) {
+        // Solo detectar lenguaje si no hay título personalizado
+        const fontMatch = match.match(/data-code-block-pro-font-family="[^"]*"/i)
+        if (fontMatch) {
+          language = fontMatch[0].replace(/data-code-block-pro-font-family="|"/g, '')
+            .replace('Code-Pro-', '')
+            .replace(/-/g, ' ')
+        }
+
+        // Detectar del contenido
+        if (content.includes('git ')) language = 'Bash'
+        else if (content.includes('npm ') || content.includes('pnpm ')) language = 'Shell'
+        else if (content.includes('function') || content.includes('const ')) language = 'JavaScript'
+        else if (content.includes('interface') || content.includes('type ')) language = 'TypeScript'
+        else if (content.includes('<?php')) language = 'PHP'
+        else if (content.includes('def ') || content.includes('import ')) language = 'Python'
+      }
 
       // Extraer el código del textarea para el atributo data-code
       const textareaMatch = content.match(/<textarea[^>]*>([\s\S]*?)<\/textarea>/i)

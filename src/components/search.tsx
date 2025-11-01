@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef, useMemo } from 'react'
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 import Link from 'next/link'
 import type { Post } from '@/types/wordpress'
@@ -34,7 +34,7 @@ export function Search({ posts }: SearchProps) {
     posts.forEach((post) => {
       const titleLower = post.title.toLowerCase()
       const excerptLower = post.excerpt.toLowerCase()
-      const contentLower = post.content.replace(/<[^>]*>/g, '').toLowerCase()
+      const contentLower = post.plainTextContent.toLowerCase() // Use cached plain text
 
       let score = 0
       let matchedField: 'title' | 'excerpt' | 'content' = 'content'
@@ -57,7 +57,7 @@ export function Search({ posts }: SearchProps) {
           }
         }
 
-        // Búsqueda en contenido (menor peso)
+        // Búsqueda en contenido (menor peso) - now using cached plain text
         if (contentLower.includes(term)) {
           score += 1
           if (!highlightedText) {
@@ -65,7 +65,7 @@ export function Search({ posts }: SearchProps) {
             const index = contentLower.indexOf(term)
             const start = Math.max(0, index - 60)
             const end = Math.min(contentLower.length, index + term.length + 60)
-            const context = post.content.replace(/<[^>]*>/g, '').substring(start, end)
+            const context = post.plainTextContent.substring(start, end)
             highlightedText = (start > 0 ? '...' : '') + context + (end < contentLower.length ? '...' : '')
             matchedField = 'content'
           }
@@ -154,12 +154,9 @@ export function Search({ posts }: SearchProps) {
     setSelectedIndex(0)
   }, [results])
 
-  const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    setQuery(value)
-
+  // Debounced ReCAPTCHA verification
+  const verifyWithRecaptcha = useCallback(async (value: string) => {
     if (value.length >= 2) {
-      // Verificar con ReCAPTCHA antes de mostrar resultados
       if (!isVerified && executeRecaptcha) {
         try {
           const token = await executeRecaptcha('search')
@@ -194,6 +191,21 @@ export function Search({ posts }: SearchProps) {
     } else {
       setIsOpen(false)
     }
+  }, [isVerified, executeRecaptcha])
+
+  // Debounce ReCAPTCHA calls to avoid excessive API hits
+  useEffect(() => {
+    const debounceTimer = setTimeout(() => {
+      verifyWithRecaptcha(query)
+    }, 400) // 400ms debounce
+
+    return () => clearTimeout(debounceTimer)
+  }, [query, verifyWithRecaptcha])
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setQuery(value)
+    // Don't call ReCAPTCHA here anymore - it's debounced in useEffect above
   }
 
   return (
@@ -256,7 +268,7 @@ export function Search({ posts }: SearchProps) {
                 <Link
                   key={result.id}
                   href={`/posts/${result.slug}`}
-                  className={`block px-4 py-3 hover:bg-muted transition-colors ${
+                  className={`block px-4 py-3 hover:bg-muted transition-colors no-underline ${
                     index === selectedIndex ? 'bg-muted' : ''
                   }`}
                   onMouseEnter={() => setSelectedIndex(index)}

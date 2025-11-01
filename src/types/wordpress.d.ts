@@ -100,6 +100,7 @@ export interface Post {
   slug: string
   excerpt: string
   content: string
+  plainTextContent: string // Cached plain text for search optimization
   date: string // Fecha formateada para mostrar (ej: "8 de marzo de 2025")
   dateISO: string // Fecha ISO original de WordPress
   author: {

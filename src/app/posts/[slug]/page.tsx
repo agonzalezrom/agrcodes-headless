@@ -1,7 +1,6 @@
 import Link from "next/link"
 import type {Metadata} from "next"
 import {notFound} from "next/navigation"
-import { ViewTransition } from "react"
 import { cacheLife } from "next/cache"
 
 import {ThemeToggle} from "@/components/theme-toggle"
@@ -138,18 +137,14 @@ export default async function PostPage({params}: { params: Promise<{ slug: strin
                         className="w-20 h-20 rounded-full mx-auto mb-4 object-cover"
                     />
                     <p className="font-semibold text-lg mb-1">{post.author.name}</p>
-                    <ViewTransition name={`post-date-${post.slug}`}>
-                        <div className="flex items-center justify-center gap-3 text-sm text-muted-foreground mb-8">
-                            <time>{post.date}</time>
-                            <span>·</span>
-                            <span>{readingTime} min de lectura</span>
-                        </div>
-                    </ViewTransition>
-                    <ViewTransition name={`post-title-${post.slug}`}>
-                        <h1 className="text-4xl md:text-5xl font-bold leading-tight inline-block">
-                            {post.title}
-                        </h1>
-                    </ViewTransition>
+                    <div className="flex items-center justify-center gap-3 text-sm text-muted-foreground mb-8">
+                        <time>{post.date}</time>
+                        <span>·</span>
+                        <span>{readingTime} min de lectura</span>
+                    </div>
+                    <h1 className="text-4xl md:text-5xl font-bold leading-tight inline-block">
+                        {post.title}
+                    </h1>
                 </header>
 
                 <div

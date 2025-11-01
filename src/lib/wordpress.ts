@@ -27,7 +27,7 @@ export async function getTotalPosts(): Promise<number> {
       `${WORDPRESS_API_URL}/posts?per_page=1&status=publish`,
       {
         cache: 'force-cache',
-        next: { revalidate: 3600 } // Revalidate every hour
+        next: { revalidate: 21600 } // Revalidate every 6 hours
       }
     )
 
@@ -57,7 +57,7 @@ export async function getPosts(page: number = 1, perPage: number = 10): Promise<
       `${WORDPRESS_API_URL}/posts?_embed&page=${page}&per_page=${perPage}&status=publish`,
       {
         cache: 'force-cache',
-        next: { revalidate: 3600 } // Revalidate every hour
+        next: { revalidate: 21600 } // Revalidate every 6 hours
       }
     )
 
@@ -86,7 +86,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
       `${WORDPRESS_API_URL}/posts?slug=${slug}&_embed`,
       {
         cache: 'force-cache',
-        next: { revalidate: 3600 } // Revalidate every hour
+        next: { revalidate: 86400 } // Revalidate every 24 hours
       }
     )
 
@@ -118,7 +118,7 @@ export async function getAllPostSlugs(): Promise<{ slug: string }[]> {
       `${WORDPRESS_API_URL}/posts?per_page=100&_fields=slug&status=publish`,
       {
         cache: 'force-cache',
-        next: { revalidate: 3600 } // Revalidate every hour
+        next: { revalidate: 86400 } // Revalidate every 24 hours
       }
     )
 
@@ -155,12 +155,17 @@ function transformPost(post: WordPressPost): Post {
   const ogImage = aioseo.og_image_url || featuredMedia?.source_url
   const twitterImage = aioseo.twitter_image_url || ogImage
 
+  // Process content once and cache plain text version for search
+  const processedContent = processWordPressContent(post.content.rendered)
+  const plainTextContent = stripHtml(processedContent)
+
   return {
     id: post.id,
     title: post.title.rendered,
     slug: post.slug,
     excerpt: stripHtml(post.excerpt.rendered),
-    content: processWordPressContent(post.content.rendered),
+    content: processedContent,
+    plainTextContent, // Cache this for search optimization
     date: formatDate(post.date),
     dateISO: post.date, // Mantener fecha ISO original
     author: {
