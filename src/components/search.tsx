@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
-import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 import Link from 'next/link'
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 import type { Post } from '@/types/wordpress'
 
 interface SearchProps {
@@ -89,6 +89,9 @@ export function Search({ posts }: SearchProps) {
     return scored.sort((a, b) => b.matchScore - a.matchScore).slice(0, 8)
   }, [query, posts])
 
+  // Ensure selectedIndex is within bounds
+  const validSelectedIndex = Math.min(selectedIndex, Math.max(0, results.length - 1))
+
   // Highlight de términos en el texto
   const highlightText = (text: string, query: string) => {
     if (!query) return text
@@ -120,8 +123,8 @@ export function Search({ posts }: SearchProps) {
           break
         case 'Enter':
           e.preventDefault()
-          if (results[selectedIndex]) {
-            window.location.href = `/posts/${results[selectedIndex].slug}`
+          if (results[validSelectedIndex]) {
+            window.location.href = `/posts/${results[validSelectedIndex].slug}`
           }
           break
         case 'Escape':
@@ -135,7 +138,7 @@ export function Search({ posts }: SearchProps) {
 
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [isOpen, results, selectedIndex])
+  }, [isOpen, results, validSelectedIndex])
 
   // Click outside to close
   useEffect(() => {
@@ -149,10 +152,13 @@ export function Search({ posts }: SearchProps) {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  // Reset selected index cuando cambian los resultados
+  // Reset selected index when query becomes empty
   useEffect(() => {
-    setSelectedIndex(0)
-  }, [results])
+    if (query.length === 0) {
+      setSelectedIndex(0)
+    }
+  }, [query])
+
 
   // Debounced ReCAPTCHA verification
   const verifyWithRecaptcha = useCallback(async (value: string) => {
@@ -269,7 +275,7 @@ export function Search({ posts }: SearchProps) {
                   key={result.id}
                   href={`/posts/${result.slug}`}
                   className={`block px-4 py-3 hover:bg-muted transition-colors no-underline ${
-                    index === selectedIndex ? 'bg-muted' : ''
+                    index === validSelectedIndex ? 'bg-muted' : ''
                   }`}
                   onMouseEnter={() => setSelectedIndex(index)}
                   onClick={() => {
@@ -313,7 +319,7 @@ export function Search({ posts }: SearchProps) {
             </div>
           ) : (
             <div className="px-4 py-8 text-center text-muted-foreground text-sm">
-              No se encontraron resultados para "{query}"
+              No se encontraron resultados para &quot;{query}&quot;
             </div>
           )}
         </div>

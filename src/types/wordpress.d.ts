@@ -32,7 +32,7 @@ export interface WordPressPost {
   sticky: boolean
   template: string
   format: string
-  meta: any[]
+  meta: Record<string, unknown>[]
   categories: number[]
   tags: number[]
   _embedded?: {

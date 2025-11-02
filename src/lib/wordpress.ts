@@ -38,7 +38,7 @@ export async function getTotalPosts(): Promise<number> {
     // WordPress devuelve el total en el header X-WP-Total
     const total = response.headers.get('X-WP-Total')
     return total ? parseInt(total, 10) : 0
-  } catch (error) {
+  } catch {
     return 0
   }
 }
@@ -67,7 +67,7 @@ export async function getPosts(page: number = 1, perPage: number = 10): Promise<
     const posts: WordPressPost[] = await response.json()
 
     return posts.map(transformPost)
-  } catch (error) {
+  } catch {
     return []
   }
 }
@@ -127,7 +127,7 @@ export async function getAllPostSlugs(): Promise<{ slug: string }[]> {
     const posts: { slug: string }[] = await response.json()
 
     return posts
-  } catch (error) {
+  } catch {
     return []
   }
 }
@@ -148,7 +148,8 @@ function transformPost(post: WordPressPost): Post {
   const terms = post._embedded?.['wp:term']
 
   // Extraer datos de All in One SEO si existen
-  const aioseo = (post as any).aioseo || {}
+  const aioseoData = (post as WordPressPost & { aioseo?: Record<string, unknown> }).aioseo || {}
+  const aioseo = aioseoData as Record<string, unknown>
   const ogImage = aioseo.og_image_url || featuredMedia?.source_url
   const twitterImage = aioseo.twitter_image_url || ogImage
 

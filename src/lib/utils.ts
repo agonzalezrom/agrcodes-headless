@@ -165,7 +165,7 @@ export function processWordPressContent(html: string): string {
             let codeForCopy = textareaMatch ? textareaMatch[1] : ''
 
             // Eliminar completamente el span con textarea y SVG decorativo
-            let cleanContent = content
+            const cleanContent = content
                 // Eliminar el SVG decorativo (los círculos de mac)
                 .replace(/<span[^>]*><svg[^>]*>[\s\S]*?<\/svg><\/span>/i, '')
                 // Eliminar el span del botón con textarea y SVG

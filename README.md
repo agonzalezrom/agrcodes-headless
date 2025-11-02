@@ -1,9 +1,9 @@
 # Headless WordPress Blog - agr.codes
 
 [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Next.js](https://img.shields.io/badge/Next.js-16.0.0-black)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.9.2-blue)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.1.13-38bdf8)](https://tailwindcss.com/)
+[![Next.js](https://img.shields.io/badge/Next.js-16.0.1-black)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-blue)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.1.16-38bdf8)](https://tailwindcss.com/)
 
 > A minimalist, SEO-optimized headless WordPress blog built with Next.js 16, TypeScript, and Tailwind CSS v4. Features Partial Prerendering (PPR) with Cache Components for optimal performance. Inspired by the clean and elegant design of world.hey.com.
 
@@ -82,16 +82,15 @@ Open [http://localhost:3000](http://localhost:3000) to see your blog.
 
 | Category | Technology |
 |----------|-----------|
-| Framework | Next.js 16.0.0 (App Router) |
+| Framework | Next.js 16.0.1 (App Router) |
 | Rendering | Partial Prerendering (PPR) + Cache Components |
-| Language | TypeScript 5.9.2 |
-| Styling | Tailwind CSS v4.1.13 |
+| Language | TypeScript 5.9.3 |
+| Styling | Tailwind CSS v4.1.16 |
 | Font | DM Sans (Google Fonts) |
-| State | React 19.1.1 Server Components |
-| UI Components | shadcn/ui (Skeleton) |
-| Theme | next-themes |
-| Security | Google ReCAPTCHA v3 |
+| State | React 19.2.0 Server Components |
+| Security | Google ReCAPTCHA v3 (react-google-recaptcha-v3 1.11.0) |
 | Performance | Turbopack, HTML minification |
+| Analytics | Vercel Speed Insights (1.2.0) & Analytics (1.5.0) |
 
 ---
 
@@ -451,5 +450,5 @@ You are free to:
 
 **Built with ❤️ by Alejandro González Romero**
 
-**Last updated**: October 25, 2025
-**Version**: 1.1.0 - Next.js 16 with Partial Prerendering (PPR) and Cache Components
+**Last updated**: November 1, 2025
+**Version**: 1.2.0 - Linting fixes, improved React hooks, better error handling

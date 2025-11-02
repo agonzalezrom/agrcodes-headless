@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import type {Metadata} from "next"
 import {notFound} from "next/navigation"
 import { cacheLife } from "next/cache"
@@ -131,10 +132,12 @@ export default async function PostPage({params}: { params: Promise<{ slug: strin
 
             <article className="max-w-5xl mx-auto px-6 py-16 md:py-24">
                 <header className="mb-16 md:mb-20 text-center">
-                    <img
+                    <Image
                         src={post.author.avatar}
                         alt={post.author.name}
                         className="w-20 h-20 rounded-full mx-auto mb-4 object-cover"
+                        height={150}
+                        width={150}
                     />
                     <p className="font-semibold text-lg mb-1">{post.author.name}</p>
                     <div className="flex items-center justify-center gap-3 text-sm text-muted-foreground mb-8">
