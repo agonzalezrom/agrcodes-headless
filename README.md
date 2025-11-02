@@ -13,7 +13,6 @@
 - ✅ **Partial Prerendering (PPR)** - Next.js 16 Cache Components for optimal performance
 - ✅ **Granular Caching** - `'use cache'` + `cacheLife()` for selective component caching
 - ✅ **Hybrid Rendering** - SSG for posts + Dynamic rendering for home + Streaming
-- ✅ **View Transitions API** - Smooth animations between pages
 - ✅ **SEO Optimized** - Sitemap, RSS feed, JSON-LD, robots.txt, Open Graph images
 - ✅ **Reading Time** - Automatic calculation per post
 - ✅ **Dark/Light Mode** - Theme toggle with persistence
@@ -68,27 +67,12 @@ Open [http://localhost:3000](http://localhost:3000) to see your blog.
 
 ---
 
-## ⚙️ Configuration
-
-### Environment Variables
-
-Create a `.env.local` file in the root directory:
-
-```bash
-# WordPress Configuration
-NEXT_PUBLIC_WORDPRESS_URL=https://your-wordpress-site.com
-NEXT_PUBLIC_BASE_URL=https://your-domain.com
-
-# ReCAPTCHA v3 (get keys at https://www.google.com/recaptcha/admin)
-NEXT_PUBLIC_RECAPTCHA_SITE_KEY=your_site_key_here
-RECAPTCHA_SECRET_KEY=your_secret_key_here
-```
-
 ### WordPress Setup
 
 1. **Enable REST API** - Usually enabled by default in WordPress
 2. **Install All in One SEO** (optional but recommended) - For better SEO metadata
 3. **Install Code Block Pro** (optional) - For syntax highlighting in posts
+4. **Install Newsletter** (optional) - For the Newsletter functionality
 
 ---
 
@@ -108,53 +92,6 @@ RECAPTCHA_SECRET_KEY=your_secret_key_here
 | Theme | next-themes |
 | Security | Google ReCAPTCHA v3 |
 | Performance | Turbopack, HTML minification |
-
-### Project Structure
-
-```
-headless/
-├── src/
-│   ├── app/                    # Next.js App Router
-│   │   ├── layout.tsx         # Root layout with metadata
-│   │   ├── page.tsx           # Homepage (dynamic rendering)
-│   │   ├── globals.css        # Global styles + WordPress blocks
-│   │   ├── robots.ts          # robots.txt generator
-│   │   ├── sitemap.ts         # sitemap.xml generator
-│   │   ├── api/
-│   │   │   └── verify-recaptcha/
-│   │   │       └── route.ts   # ReCAPTCHA validation
-│   │   ├── feed.xml/
-│   │   │   └── route.ts       # RSS 2.0 feed
-│   │   └── posts/
-│   │       └── [slug]/
-│   │           └── page.tsx   # Post template (SSG + ISR)
-│   │
-│   ├── components/            # React components
-│   │   ├── code-block.tsx    # Copy code functionality
-│   │   ├── newsletter-form.tsx # Newsletter subscription
-│   │   ├── recaptcha-provider.tsx # ReCAPTCHA provider
-│   │   ├── search.tsx        # Smart search with scoring
-│   │   └── theme-toggle.tsx  # Dark/light mode toggle
-│   │
-│   ├── lib/                   # Business logic
-│   │   ├── utils.ts          # Utilities (cn, stripHtml, formatDate, etc.)
-│   │   └── wordpress.ts      # WordPress REST API client
-│   │
-│   └── types/                 # Type definitions
-│       └── wordpress.d.ts    # WordPress API types
-│
-├── public/                    # Static assets
-│   ├── favicon.ico           # Favicon
-│   ├── favicon.svg           # Vector favicon
-│   ├── apple-touch-icon.png  # iOS icon
-│   └── site.webmanifest      # PWA manifest
-│
-├── next.config.mjs           # Next.js configuration
-├── tsconfig.json             # TypeScript configuration
-├── tailwind.config.ts        # Tailwind configuration
-├── LICENSE                   # MIT License
-└── package.json              # Dependencies
-```
 
 ---
 
@@ -201,24 +138,7 @@ The design uses CSS custom properties with RGB values for theme compatibility:
 
 ## 📄 Key Features
 
-### 1. View Transitions API
-
-Smooth, native animations between pages using React's `unstable_ViewTransition`:
-
-```tsx
-import { unstable_ViewTransition as ViewTransition } from "react"
-
-<ViewTransition name={`post-title-${post.slug}`}>
-  <h2 className="inline-block">{post.title}</h2>
-</ViewTransition>
-```
-
-**Requirements:**
-- Elements must have `inline-block` or `block` display
-- Matching `name` props between source and destination pages
-- `experimental.viewTransition: true` in `next.config.mjs`
-
-### 2. SEO Features
+### 1. SEO Features
 
 #### Sitemap.xml
 Dynamic sitemap generated at build time from WordPress posts:
@@ -245,7 +165,7 @@ Dynamic robots.txt with:
 - Block `/api/` and `/admin/`
 - Reference to sitemap
 
-### 3. Smart Search
+### 2. Smart Search
 
 Client-side search with intelligent scoring:
 
@@ -261,7 +181,7 @@ Client-side search with intelligent scoring:
 score = (titleMatches × 3) + (excerptMatches × 2) + (contentMatches × 1)
 ```
 
-### 4. ReCAPTCHA v3 Integration
+### 3. ReCAPTCHA v3 Integration
 
 Invisible bot protection on:
 - Search functionality
@@ -273,14 +193,14 @@ Invisible bot protection on:
 3. Server validates with Google's API
 4. Score threshold: 0.5 (configurable)
 
-### 5. Reading Time
+### 4. Reading Time
 
 Automatic calculation based on:
 - Word count (HTML stripped)
 - 200 words per minute (standard)
 - Displayed on post pages
 
-### 6. Content Processing
+### 5. Content Processing
 
 WordPress HTML goes through a pipeline:
 
@@ -289,7 +209,7 @@ WordPress HTML goes through a pipeline:
 3. **Style Cleanup** - Remove inline styles and color attributes
 4. **Minification** - Reduce size while preserving code blocks
 
-### 7. Next.js 16 Cache Components (PPR)
+### 6. Next.js 16 Cache Components (PPR)
 
 Implements Partial Prerendering for optimal performance:
 
@@ -322,39 +242,6 @@ const nextConfig = {
 - 🔄 No `revalidate` conflicts with PPR
 
 ---
-
-## 🚀 Build & Deploy
-
-### Build Strategies
-
-The project uses **hybrid rendering** for optimal performance:
-
-| Page | Strategy | Config |
-|------|----------|--------|
-| Homepage | Dynamic | `export const dynamic = 'force-dynamic'` |
-| Posts | SSG + ISR | `generateStaticParams()` + `revalidate: 3600` |
-| API Routes | Dynamic | Default behavior |
-
-**Why hybrid?**
-- Homepage: Always fresh, supports API routes (ReCAPTCHA)
-- Posts: Ultra-fast, CDN-cached, regenerate every hour
-- Best of both worlds
-
-### Build Commands
-
-```bash
-# Development (with Turbopack)
-pnpm dev
-
-# Production build
-pnpm build
-
-# Start production server
-pnpm start
-
-# Lint
-pnpm lint
-```
 
 
 ## 🔧 API Reference
@@ -559,30 +446,6 @@ You are free to:
 - Design inspired by [world.hey.com](https://world.hey.com) by DHH
 - Built with [Next.js](https://nextjs.org/)
 - Styled with [Tailwind CSS](https://tailwindcss.com/)
-
----
-
-## 📚 Additional Resources
-
-- [Next.js Documentation](https://nextjs.org/docs)
-- [WordPress REST API Handbook](https://developer.wordpress.org/rest-api/)
-- [ReCAPTCHA v3 Documentation](https://developers.google.com/recaptcha/docs/v3)
-- [Tailwind CSS v4 Docs](https://tailwindcss.com/docs)
-
----
-
-## 🔮 Roadmap
-
-### Planned 🚧
-- [ ] Category/tag filtering
-- [ ] Related posts
-- [ ] Table of contents for long posts
-- [ ] Comments integration (Giscus/Utterances)
-- [ ] Share buttons
-- [ ] Reading progress bar
-- [ ] Popular posts widget
-- [ ] Search analytics
-- [ ] Open Graph image generation
 
 ---
 

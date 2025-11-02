@@ -39,7 +39,6 @@ export async function getTotalPosts(): Promise<number> {
     const total = response.headers.get('X-WP-Total')
     return total ? parseInt(total, 10) : 0
   } catch (error) {
-    console.error('Error fetching total posts:', error)
     return 0
   }
 }
@@ -69,7 +68,6 @@ export async function getPosts(page: number = 1, perPage: number = 10): Promise<
 
     return posts.map(transformPost)
   } catch (error) {
-    console.error('Error fetching posts:', error)
     return []
   }
 }
@@ -130,7 +128,6 @@ export async function getAllPostSlugs(): Promise<{ slug: string }[]> {
 
     return posts
   } catch (error) {
-    console.error('Error fetching post slugs:', error)
     return []
   }
 }

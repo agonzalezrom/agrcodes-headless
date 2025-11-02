@@ -107,25 +107,3 @@ export function NewsletterForm() {
         </div>
     )
 }
-
-/**
- * Configuración requerida en WordPress:
- *
- * 1. Instalar un plugin de newsletter (opciones recomendadas):
- *    - Newsletter (gratuito): https://wordpress.org/plugins/newsletter/
- *    - Mailchimp for WordPress: https://wordpress.org/plugins/mailchimp-for-wp/
- *    - Newsletter Glue: https://wordpress.org/plugins/newsletter-glue/
- *
- * 2. El plugin debe exponer un endpoint REST API como:
- *    POST /wp-json/newsletter/v1/subscribe
- *    Body: { "email": "user@example.com" }
- *
- * 3. Si usas un plugin diferente, ajusta la URL del endpoint en esta línea:
- *    `${WORDPRESS_URL}/wp-json/newsletter/v1/subscribe`
- *
- * Alternativa: Usar un servicio externo como:
- * - Mailchimp API
- * - ConvertKit API
- * - Buttondown API
- * - Substack API
- */
