@@ -1,5 +1,5 @@
 {
-  "name": "agr.codes",
+  "name": "agrcodes-headless",
   "version": "1.2.0",
   "description": "A minimalist, SEO-optimized headless WordPress blog built with Next.js 16, TypeScript, and Tailwind CSS v4",
   "author": "Alejandro González Romero <alejandro@poply.org> (https://agrcodes.com)",
