@@ -125,7 +125,7 @@ export default async function PostPage({params}: { params: Promise<{ slug: strin
                     href="/"
                     className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
-                    ← Volver
+                    ← Inicio
                 </Link>
                 <ThemeToggle/>
             </nav>
