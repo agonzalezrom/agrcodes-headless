@@ -82,10 +82,10 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
   try {
     const response = await fetch(
       `${WORDPRESS_API_URL}/posts?slug=${slug}&_embed`,
-      {
-        cache: 'force-cache',
-        next: { revalidate: 86400 } // Revalidate every 24 hours
-      }
+      // {
+      //   cache: 'force-cache',
+      //   next: { revalidate: 86400 } // Revalidate every 24 hours
+      // }
     )
 
     if (!response.ok) {
@@ -180,15 +180,15 @@ function transformPost(post: WordPressPost): Post {
       : undefined,
     categories: terms?.[0]?.map((term) => term.name) || [],
     tags: terms?.[1]?.map((term) => term.name) || [],
-    seo: {
-      title: aioseo.title || post.title.rendered,
-      description: aioseo.description || stripHtml(post.excerpt.rendered),
-      ogTitle: aioseo.og_title || aioseo.title || post.title.rendered,
-      ogDescription: aioseo.og_description || aioseo.description || stripHtml(post.excerpt.rendered),
-      ogImage: ogImage,
-      twitterTitle: aioseo.twitter_title || aioseo.title || post.title.rendered,
-      twitterDescription: aioseo.twitter_description || aioseo.description || stripHtml(post.excerpt.rendered),
-      twitterImage: twitterImage,
-    }
+    // seo: {
+    //   title: aioseo.title || post.title.rendered,
+    //   description: aioseo.description || stripHtml(post.excerpt.rendered),
+    //   ogTitle: aioseo.og_title || aioseo.title || post.title.rendered,
+    //   ogDescription: aioseo.og_description || aioseo.description || stripHtml(post.excerpt.rendered),
+    //   ogImage: ogImage,
+    //   twitterTitle: aioseo.twitter_title || aioseo.title || post.title.rendered,
+    //   twitterDescription: aioseo.twitter_description || aioseo.description || stripHtml(post.excerpt.rendered),
+    //   twitterImage: twitterImage,
+    // }
   }
 }

@@ -67,9 +67,11 @@ export async function generateMetadata({params}: { params: Promise<{slug: string
     }
 }
 
+export const dynamic = 'force-dynamic'
+
 export default async function PostPage({params}: { params: Promise<{ slug: string }> }) {
-    'use cache'
-    cacheLife('hours')
+    // 'use cache'
+    // cacheLife('hours')
 
     const { slug } = await params
     const post = await getPostBySlug(slug)
