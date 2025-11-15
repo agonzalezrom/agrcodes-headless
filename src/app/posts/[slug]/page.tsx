@@ -9,6 +9,9 @@ import {CodeBlock} from "@/components/code-block"
 import {getPostBySlug, getAllPostSlugs} from "@/lib/wordpress"
 import {calculateReadingTime} from "@/lib/utils"
 
+// ISR: Revalidate every 60 seconds for near real-time updates
+export const revalidate = 60
+
 export async function generateStaticParams() {
     return await getAllPostSlugs()
 }
@@ -67,11 +70,7 @@ export async function generateMetadata({params}: { params: Promise<{slug: string
     }
 }
 
-export const dynamic = 'force-dynamic'
-
 export default async function PostPage({params}: { params: Promise<{ slug: string }> }) {
-    // 'use cache'
-    // cacheLife('hours')
 
     const { slug } = await params
     const post = await getPostBySlug(slug)

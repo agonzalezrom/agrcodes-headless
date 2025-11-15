@@ -7,6 +7,9 @@ import {PostsListSkeleton} from "@/components/posts-list-skeleton"
 import {CurrentYear} from "@/components/current-year"
 import {getPosts} from "@/lib/wordpress"
 
+// ISR: Revalidate every 5 minutes for near real-time updates
+export const revalidate = 300
+
 interface HomeProps {
     searchParams: Promise<{ page?: string }>
 }

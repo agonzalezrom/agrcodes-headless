@@ -35,7 +35,8 @@ export async function GET() {
   return new NextResponse(rss, {
     headers: {
       'Content-Type': 'application/xml; charset=utf-8',
-      'Cache-Control': 'public, max-age=3600, s-maxage=3600',
+      // 5 minutes for CDN cache, 5 minutes for browser cache - near real-time updates
+      'Cache-Control': 'public, max-age=300, s-maxage=300',
     },
   })
 }

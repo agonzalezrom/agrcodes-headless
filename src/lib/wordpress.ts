@@ -27,7 +27,7 @@ export async function getTotalPosts(): Promise<number> {
       `${WORDPRESS_API_URL}/posts?per_page=1&status=publish`,
       {
         cache: 'force-cache',
-        next: { revalidate: 21600 } // Revalidate every 6 hours
+        next: { revalidate: 300 } // Revalidate every 5 minutes for near real-time
       }
     )
 
@@ -56,7 +56,7 @@ export async function getPosts(page: number = 1, perPage: number = 10): Promise<
       `${WORDPRESS_API_URL}/posts?_embed&page=${page}&per_page=${perPage}&status=publish`,
       {
         cache: 'force-cache',
-        next: { revalidate: 21600 } // Revalidate every 6 hours
+        next: { revalidate: 300 } // Revalidate every 5 minutes for near real-time
       }
     )
 
@@ -82,10 +82,10 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
   try {
     const response = await fetch(
       `${WORDPRESS_API_URL}/posts?slug=${slug}&_embed`,
-      // {
-      //   cache: 'force-cache',
-      //   next: { revalidate: 86400 } // Revalidate every 24 hours
-      // }
+      {
+        cache: 'force-cache',
+        next: { revalidate: 60 } // Revalidate every 60 seconds for near real-time updates
+      }
     )
 
     if (!response.ok) {
@@ -116,7 +116,7 @@ export async function getAllPostSlugs(): Promise<{ slug: string }[]> {
       `${WORDPRESS_API_URL}/posts?per_page=100&_fields=slug&status=publish`,
       {
         cache: 'force-cache',
-        next: { revalidate: 86400 } // Revalidate every 24 hours
+        next: { revalidate: 3600 } // Revalidate every 1 hour for detecting new posts
       }
     )
 
@@ -150,8 +150,15 @@ function transformPost(post: WordPressPost): Post {
   // Extraer datos de All in One SEO si existen
   const aioseoData = (post as WordPressPost & { aioseo?: Record<string, unknown> }).aioseo || {}
   const aioseo = aioseoData as Record<string, unknown>
-  const ogImage = aioseo.og_image_url || featuredMedia?.source_url
-  const twitterImage = aioseo.twitter_image_url || ogImage
+
+  // Helper function to safely get string values from aioseo
+  const getString = (key: string, fallback: string = ''): string => {
+    const value = aioseo[key]
+    return typeof value === 'string' ? value : fallback
+  }
+
+  const ogImage = getString('og_image_url') || featuredMedia?.source_url
+  const twitterImage = getString('twitter_image_url') || ogImage
 
   // Process content once and cache plain text version for search
   const processedContent = processWordPressContent(post.content.rendered)
@@ -181,13 +188,13 @@ function transformPost(post: WordPressPost): Post {
     categories: terms?.[0]?.map((term) => term.name) || [],
     tags: terms?.[1]?.map((term) => term.name) || [],
     seo: {
-      title: aioseo.title || post.title.rendered,
-      description: aioseo.description || stripHtml(post.excerpt.rendered),
-      ogTitle: aioseo.og_title || aioseo.title || post.title.rendered,
-      ogDescription: aioseo.og_description || aioseo.description || stripHtml(post.excerpt.rendered),
+      title: getString('title') || post.title.rendered,
+      description: getString('description') || stripHtml(post.excerpt.rendered),
+      ogTitle: getString('og_title') || getString('title') || post.title.rendered,
+      ogDescription: getString('og_description') || getString('description') || stripHtml(post.excerpt.rendered),
       ogImage: ogImage,
-      twitterTitle: aioseo.twitter_title || aioseo.title || post.title.rendered,
-      twitterDescription: aioseo.twitter_description || aioseo.description || stripHtml(post.excerpt.rendered),
+      twitterTitle: getString('twitter_title') || getString('title') || post.title.rendered,
+      twitterDescription: getString('twitter_description') || getString('description') || stripHtml(post.excerpt.rendered),
       twitterImage: twitterImage,
     }
   }

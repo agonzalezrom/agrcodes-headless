@@ -20,7 +20,6 @@ const nextConfig = {
       },
     ],
   },
-  cacheComponents: false,
 }
 
 export default nextConfig
