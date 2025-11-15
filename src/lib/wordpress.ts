@@ -180,15 +180,15 @@ function transformPost(post: WordPressPost): Post {
       : undefined,
     categories: terms?.[0]?.map((term) => term.name) || [],
     tags: terms?.[1]?.map((term) => term.name) || [],
-    // seo: {
-    //   title: aioseo.title || post.title.rendered,
-    //   description: aioseo.description || stripHtml(post.excerpt.rendered),
-    //   ogTitle: aioseo.og_title || aioseo.title || post.title.rendered,
-    //   ogDescription: aioseo.og_description || aioseo.description || stripHtml(post.excerpt.rendered),
-    //   ogImage: ogImage,
-    //   twitterTitle: aioseo.twitter_title || aioseo.title || post.title.rendered,
-    //   twitterDescription: aioseo.twitter_description || aioseo.description || stripHtml(post.excerpt.rendered),
-    //   twitterImage: twitterImage,
-    // }
+    seo: {
+      title: aioseo.title || post.title.rendered,
+      description: aioseo.description || stripHtml(post.excerpt.rendered),
+      ogTitle: aioseo.og_title || aioseo.title || post.title.rendered,
+      ogDescription: aioseo.og_description || aioseo.description || stripHtml(post.excerpt.rendered),
+      ogImage: ogImage,
+      twitterTitle: aioseo.twitter_title || aioseo.title || post.title.rendered,
+      twitterDescription: aioseo.twitter_description || aioseo.description || stripHtml(post.excerpt.rendered),
+      twitterImage: twitterImage,
+    }
   }
 }
