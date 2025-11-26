@@ -27,6 +27,7 @@
 - ✅ **WordPress REST API** - Headless CMS integration
 - ✅ **All in One SEO** - Full metadata support
 - ✅ **Code Block Pro** - Syntax highlighting support
+- ✅ **AGR Headless Math** - KaTeX math formula rendering (block & inline)
 - ✅ **HTML Minification** - Automatic content optimization
 
 ### Developer Experience
@@ -88,6 +89,7 @@ Open [http://localhost:3000](http://localhost:3000) to see your blog.
 | Styling | Tailwind CSS v4.1.16 |
 | Font | DM Sans (Google Fonts) |
 | State | React 19.2.0 Server Components |
+| Math | KaTeX 0.16.25 (LaTeX formulas) |
 | Security | Google ReCAPTCHA v3 (react-google-recaptcha-v3 1.11.0) |
 | Performance | Turbopack, HTML minification |
 | Analytics | Vercel Speed Insights (1.2.0) & Analytics (1.5.0) |
@@ -199,16 +201,28 @@ Automatic calculation based on:
 - 200 words per minute (standard)
 - Displayed on post pages
 
-### 5. Content Processing
+### 5. Math Formula Rendering (KaTeX)
+
+Automatic rendering of mathematical formulas from WordPress with KaTeX:
+
+- **Block mode** - `<div class="agr-math agr-math-block" data-formula="..."></div>`
+- **Inline mode** - `<span class="agr-math agr-math-inline" data-formula="..."></span>`
+- **Components** - `PostMath` (automatic) or `PostContentWithMath` (flexible)
+- **Error handling** - Invalid formulas show gracefully without breaking the page
+
+Used by the "AGR Headless Math" WordPress plugin. See demo at `/math-examples`.
+
+### 6. Content Processing
 
 WordPress HTML goes through a pipeline:
 
 1. **Sanitization** - Remove scripts and event handlers
 2. **Code Block Pro** - Restructure and clean syntax highlighting
-3. **Style Cleanup** - Remove inline styles and color attributes
-4. **Minification** - Reduce size while preserving code blocks
+3. **Math Formulas** - Process KaTeX elements client-side
+4. **Style Cleanup** - Remove inline styles and color attributes
+5. **Minification** - Reduce size while preserving code blocks
 
-### 6. Next.js 16 Cache Components (PPR)
+### 7. Next.js 16 Cache Components (PPR)
 
 Implements Partial Prerendering for optimal performance:
 
@@ -450,5 +464,5 @@ You are free to:
 
 **Built with ❤️ by Alejandro González Romero**
 
-**Last updated**: November 1, 2025
-**Version**: 1.2.0 - Linting fixes, improved React hooks, better error handling
+**Last updated**: November 26, 2025
+**Version**: 1.3.0 - KaTeX math formula rendering with PostMath component

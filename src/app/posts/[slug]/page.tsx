@@ -6,6 +6,7 @@ import { cacheLife } from "next/cache"
 
 import {ThemeToggle} from "@/components/theme-toggle"
 import {CodeBlock} from "@/components/code-block"
+import {PostMath} from "@/components/post-math"
 import {getPostBySlug, getAllPostSlugs} from "@/lib/wordpress"
 import {calculateReadingTime} from "@/lib/utils"
 
@@ -40,7 +41,7 @@ export async function generateMetadata({params}: { params: Promise<{slug: string
             title: post.seo?.ogTitle || post.seo?.title || post.title,
             description: post.seo?.ogDescription || post.seo?.description || post.excerpt,
             url: postUrl,
-            siteName: 'agr.codes',
+            siteName: 'agrcodes.com',
             publishedTime: post.dateISO,
             authors: [post.author.name],
             images: post.seo?.ogImage
@@ -120,6 +121,7 @@ export default async function PostPage({params}: { params: Promise<{ slug: strin
             />
 
             <CodeBlock/>
+            <PostMath/>
 
             <nav className="fixed top-6 z-50 left-6 right-6 flex items-center justify-between">
                 <Link
