@@ -32,7 +32,6 @@ export function PostMath() {
         window.katex = katex
         return true
       } catch (error) {
-        console.error('Error al cargar KaTeX dinámicamente:', error)
         return false
       }
     }
@@ -41,14 +40,11 @@ export function PostMath() {
       // Asegurar que KaTeX esté disponible
       const katexLoaded = await loadKaTeX()
       if (!katexLoaded) {
-        console.error('KaTeX no se pudo cargar')
         return
       }
 
       // Buscar todos los elementos con clase agr-math
       const mathElements = document.querySelectorAll('.agr-math[data-formula]')
-
-      console.log(`Encontrados ${mathElements.length} elementos .agr-math`)
 
       mathElements.forEach((element, index) => {
         // Obtener la fórmula del atributo data-formula
@@ -66,10 +62,6 @@ export function PostMath() {
             element.classList.contains('agr-math-block') ||
             element.tagName === 'DIV'
 
-          console.log(
-            `Renderizando fórmula #${index}: displayMode=${displayMode}`
-          )
-
           // Renderizar la fórmula con KaTeX
           // @ts-ignore
           window.katex.render(formula, element as HTMLElement, {
@@ -78,7 +70,6 @@ export function PostMath() {
             strict: 'ignore',
           })
         } catch (error) {
-          console.error(`Error al renderizar fórmula "${formula}":`, error)
           // Mostrar un mensaje de error discreto
           element.innerHTML = `<span style="color: #ef4444; font-size: 0.9em;">⚠️ Error renderizando</span>`
         }
