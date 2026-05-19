@@ -94,15 +94,23 @@ export interface WordPressTerm {
   taxonomy: string
 }
 
+export interface Heading {
+  level: 2 | 3
+  slug: string
+  text: string
+}
+
 export interface Post {
   id: number
   title: string
   slug: string
   excerpt: string
   content: string
-  plainTextContent: string // Cached plain text for search optimization
-  date: string // Fecha formateada para mostrar (ej: "8 de marzo de 2025")
-  dateISO: string // Fecha ISO original de WordPress
+  plainTextContent: string
+  date: string
+  dateISO: string
+  modifiedISO: string
+  headings: Heading[]
   author: {
     name: string
     avatar: string
@@ -125,4 +133,11 @@ export interface Post {
     twitterDescription?: string
     twitterImage?: string
   }
+}
+
+export interface PostPreview {
+  id: number
+  slug: string
+  title: string
+  dateISO: string
 }

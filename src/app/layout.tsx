@@ -1,17 +1,22 @@
 import {Suspense} from "react"
 import type {Metadata} from "next"
-import {DM_Sans} from "next/font/google"
+import {Geist, Geist_Mono} from "next/font/google"
 import {SpeedInsights} from "@vercel/speed-insights/next"
 import {Analytics} from "@vercel/analytics/next"
 
 import {ReCaptchaProvider} from "@/components/recaptcha-provider"
 import "./globals.css"
 
-const dmSans = DM_Sans({
+const geistSans = Geist({
     subsets: ["latin"],
-    variable: "--font-dm-sans",
+    variable: "--font-geist-sans",
     display: "swap",
-    weight: ["400", "500", "600", "700"],
+})
+
+const geistMono = Geist_Mono({
+    subsets: ["latin"],
+    variable: "--font-geist-mono",
+    display: "swap",
 })
 
 export const metadata: Metadata = {
@@ -58,12 +63,17 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({children,}: Readonly<{ children: React.ReactNode }>) {
     return (
-        <html lang="es" className={dmSans.variable}>
+        <html lang="es" className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
         <head>
             <link rel="icon" href="/favicon.ico" sizes="any"/>
             <link rel="icon" href="/favicon.svg" type="image/svg+xml"/>
             <link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
             <link rel="manifest" href="/site.webmanifest"/>
+            <script
+                dangerouslySetInnerHTML={{
+                    __html: `(function(){try{var t=localStorage.getItem('theme');var d=window.matchMedia('(prefers-color-scheme: dark)').matches;if(t==='dark'||(!t&&d)){document.documentElement.classList.add('dark')}}catch(e){}})();`,
+                }}
+            />
         </head>
         <body className="font-sans antialiased">
         <Suspense>

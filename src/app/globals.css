@@ -4,48 +4,60 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  /* Slate palette — cool-toned neutrals */
   --background: 255 255 255;
-  --foreground: 17 24 39;
+  --foreground: 2 6 23;             /* slate-950 */
   --card: 255 255 255;
-  --card-foreground: 17 24 39;
+  --card-foreground: 2 6 23;
   --popover: 255 255 255;
-  --popover-foreground: 17 24 39;
-  --primary: 17 24 39;
-  --primary-foreground: 249 250 251;
-  --secondary: 243 244 246;
-  --secondary-foreground: 17 24 39;
-  --muted: 243 244 246;
-  --muted-foreground: 107 114 128;
-  --accent: 243 244 246;
-  --accent-foreground: 17 24 39;
-  --destructive: 239 68 68;
-  --destructive-foreground: 255 255 255;
-  --border: 229 231 235;
-  --input: 229 231 235;
-  --ring: 17 24 39;
+  --popover-foreground: 2 6 23;
+  --primary: 2 6 23;
+  --primary-foreground: 248 250 252; /* slate-50 */
+  --secondary: 241 245 249;          /* slate-100 */
+  --secondary-foreground: 2 6 23;
+  --muted: 241 245 249;              /* slate-100 */
+  --muted-foreground: 100 116 139;   /* slate-500 */
+  --accent: 241 245 249;
+  --accent-foreground: 2 6 23;
+  --destructive: 220 38 38;
+  --destructive-foreground: 248 250 252;
+  --border: 226 232 240;             /* slate-200 */
+  --input: 226 232 240;
+  --ring: 2 6 23;
   --radius: 0.5rem;
+
+  /* Editorial */
+  --reading-width: 680px;
+  --layout-width: 768px;
+  --layout-wide: 1280px;
+
+  /* Motion */
+  --duration-exit: 150ms;
+  --duration-enter: 210ms;
+  --duration-move: 400ms;
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .dark {
-  --background: 15 23 42;
-  --foreground: 241 245 249;
-  --card: 15 23 42;
-  --card-foreground: 241 245 249;
+  --background: 2 6 23;              /* slate-950 */
+  --foreground: 248 250 252;         /* slate-50 */
+  --card: 15 23 42;                  /* slate-900 — subtly raised */
+  --card-foreground: 248 250 252;
   --popover: 15 23 42;
-  --popover-foreground: 241 245 249;
-  --primary: 241 245 249;
-  --primary-foreground: 15 23 42;
-  --secondary: 30 41 59;
-  --secondary-foreground: 241 245 249;
-  --muted: 30 41 59;
-  --muted-foreground: 148 163 184;
-  --accent: 30 41 59;
-  --accent-foreground: 241 245 249;
-  --destructive: 220 38 38;
-  --destructive-foreground: 254 242 242;
-  --border: 51 65 85;
-  --input: 51 65 85;
-  --ring: 148 163 184;
+  --popover-foreground: 248 250 252;
+  --primary: 248 250 252;
+  --primary-foreground: 2 6 23;
+  --secondary: 15 23 42;
+  --secondary-foreground: 248 250 252;
+  --muted: 15 23 42;
+  --muted-foreground: 148 163 184;   /* slate-400 */
+  --accent: 15 23 42;
+  --accent-foreground: 248 250 252;
+  --destructive: 239 68 68;
+  --destructive-foreground: 248 250 252;
+  --border: 30 41 59;                /* slate-800 */
+  --input: 30 41 59;
+  --ring: 203 213 225;               /* slate-300 */
 }
 
 @theme inline {
@@ -72,7 +84,8 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --font-sans: var(--font-dm-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-sans: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", Monaco, "Cascadia Mono", "Segoe UI Mono", "Roboto Mono", Consolas, monospace;
 }
 
 @layer base {
@@ -80,162 +93,181 @@
     border-color: var(--color-border);
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
-    font-size: 1.0625rem;
-    transition: background-color 0.2s, color 0.2s;
+    font-size: 1rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
 
-  /* Asegurar que el contenido de WordPress use nuestro tema */
+  ::selection {
+    background-color: rgb(var(--foreground) / 0.15);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    letter-spacing: -0.022em;
+    color: var(--color-foreground);
+  }
+
+  /* Editorial prose — 68ch reading width */
   .prose {
     color: var(--color-foreground);
-    font-size: 1.125rem;
+    font-size: 1.0625rem;
+    line-height: 1.75;
+    max-width: 100%;
   }
 
   @media (min-width: 768px) {
     .prose {
-      font-size: 1.1875rem;
+      font-size: 1.125rem;
     }
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-family: var(--font-sans);
-    letter-spacing: -0.025em;
-    font-weight: 700;
-    background: linear-gradient(90deg, currentColor 0%, currentColor 100%);
-    background-size: 100% 100%;
-    background-clip: text;
-    -webkit-background-clip: text;
-    transition: all 0.3s ease;
+  .prose > * + * {
+    margin-top: 1.5em;
   }
 
-  h1:hover,
-  h2:hover,
-  h3:hover,
-  h4:hover,
-  h5:hover,
-  h6:hover {
-    background: linear-gradient(
-      90deg,
-      rgb(34, 197, 94) 0%,
-      rgb(16, 185, 129) 25%,
-      rgb(6, 182, 212) 50%,
-      rgb(59, 130, 246) 75%,
-      rgb(34, 197, 94) 100%
-    );
-    background-size: 200% 100%;
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: gradient-shift 3s ease infinite;
-  }
-
-  @keyframes gradient-shift {
-    0% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
-    100% {
-      background-position: 0% 50%;
-    }
-  }
-
-  /* Headings dentro del contenido de posts */
   .prose h1 {
-    font-size: 2.25rem;
-    line-height: 1.2;
+    font-size: 2rem;
+    line-height: 1.15;
     margin-top: 3rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
+    letter-spacing: -0.03em;
   }
 
   .prose h2 {
-    font-size: 1.875rem;
-    line-height: 1.3;
+    font-size: 1.5rem;
+    line-height: 1.25;
     margin-top: 2.5rem;
-    margin-bottom: 1.25rem;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.025em;
   }
 
   .prose h3 {
-    font-size: 1.5rem;
-    line-height: 1.4;
+    font-size: 1.25rem;
+    line-height: 1.3;
     margin-top: 2rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
   }
 
   .prose h4 {
-    font-size: 1.25rem;
-    line-height: 1.5;
-    margin-top: 1.75rem;
-    margin-bottom: 0.875rem;
-  }
-
-  .prose h5 {
-    font-size: 1.125rem;
-    line-height: 1.5;
+    font-size: 1.0625rem;
+    line-height: 1.4;
     margin-top: 1.5rem;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
   }
 
+  .prose h5,
   .prose h6 {
     font-size: 1rem;
-    line-height: 1.5;
     margin-top: 1.5rem;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
   }
 
-  p {
+  /* Anchor link reveal on headings */
+  .prose h2,
+  .prose h3 {
+    scroll-margin-top: 6rem;
+    position: relative;
+  }
+
+  .prose h2[id]:hover::before,
+  .prose h3[id]:hover::before {
+    content: "#";
+    position: absolute;
+    left: -1.25rem;
+    color: var(--color-muted-foreground);
+    font-weight: 400;
+    opacity: 0.6;
+  }
+
+  .prose p {
     line-height: 1.75;
-    margin-bottom: 1.5rem;
   }
 
-  a {
-    color: rgb(2 6 23); /* slate-950 */
+  /* Links inside prose */
+  .prose a {
+    color: var(--color-foreground);
     text-decoration: underline;
-    text-decoration-color: rgb(148 163 184); /* slate-400 for subtle underline */
-    text-underline-offset: 2px;
-    transition: all 0.2s;
+    text-decoration-thickness: 1px;
+    text-decoration-color: var(--color-border);
+    text-underline-offset: 3px;
+    transition: text-decoration-color 150ms var(--ease);
   }
 
-  a:hover {
-    color: rgb(15 23 42); /* slate-900 on hover */
-    text-decoration-color: rgb(2 6 23); /* slate-950 underline on hover */
+  .prose a:hover {
+    text-decoration-color: var(--color-foreground);
   }
 
-  a:visited {
-    color: rgb(51 65 85); /* slate-700 for visited */
+  /* Global link defaults (outside prose) — clean, no chrome */
+  a {
+    color: inherit;
+    text-decoration: none;
   }
 
-  a:active {
-    color: rgb(71 85 105); /* slate-600 for active */
+  /* Lists */
+  .prose ul,
+  .prose ol {
+    padding-left: 1.5rem;
   }
 
-  /* Dark mode links */
-  .dark a {
-    color: rgb(226 232 240); /* slate-200 */
-    text-decoration-color: rgb(100 116 139); /* slate-500 */
+  .prose ul {
+    list-style-type: disc;
   }
 
-  .dark a:hover {
-    color: rgb(241 245 249); /* slate-100 on hover */
-    text-decoration-color: rgb(148 163 184); /* slate-400 */
+  .prose ol {
+    list-style-type: decimal;
   }
 
-  .dark a:visited {
-    color: rgb(203 213 225); /* slate-300 for visited */
+  .prose li {
+    margin-top: 0.5rem;
+    line-height: 1.7;
   }
 
-  .dark a:active {
-    color: rgb(148 163 184); /* slate-400 for active */
+  .prose li::marker {
+    color: var(--color-muted-foreground);
   }
+
+  /* Strong / em */
+  .prose strong {
+    color: var(--color-foreground);
+    font-weight: 600;
+  }
+
+  .prose em {
+    font-style: italic;
+  }
+
+  /* HR */
+  .prose hr {
+    border: none;
+    border-top: 1px solid var(--color-border);
+    margin: 3rem 0;
+  }
+
+  /* Inline code */
+  .prose :not(pre) > code {
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    background-color: var(--color-muted);
+    border: 1px solid var(--color-border);
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.25rem;
+  }
+
+  /* ============================================
+     WordPress Blocks — Editorial minimal
+     ============================================ */
 
   .wp-block-image {
     margin: 2rem 0;
@@ -245,139 +277,138 @@
     border-radius: 0.5rem;
     width: 100%;
     height: auto;
+    border: 1px solid var(--color-border);
   }
 
   .wp-block-image figcaption {
-    font-size: 0.875rem;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
     color: var(--color-muted-foreground);
-    margin-top: 0.5rem;
+    margin-top: 0.75rem;
     text-align: center;
-    font-style: italic;
+    letter-spacing: -0.01em;
   }
 
-  /* WordPress Quote Blocks - Stunning Design */
-  .wp-block-quote {
+  /* Quote — soft card with decorative serif mark */
+  .wp-block-quote,
+  .prose blockquote {
     position: relative;
     border: none;
-    padding: 2rem 2rem 2rem 4rem;
-    margin: 3rem 0;
-    background: linear-gradient(135deg, var(--color-muted) 0%, var(--color-secondary) 100%);
-    border-radius: 1rem;
+    padding: 1.5rem 1.75rem 1.5rem 3.25rem;
+    margin: 2.5rem 0;
+    background: var(--color-muted);
+    border-radius: 0.75rem;
     font-style: italic;
-    font-size: 1.25rem;
-    line-height: 1.8;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: var(--color-foreground);
+    box-shadow: none;
   }
 
-  .wp-block-quote::before {
+  .wp-block-quote::before,
+  .prose blockquote::before {
     content: '"';
     position: absolute;
-    left: 1rem;
-    top: 0.5rem;
-    font-size: 6rem;
+    left: 0.875rem;
+    top: 0.125rem;
+    font-size: 3.75rem;
     font-weight: 700;
     line-height: 1;
-    color: var(--color-primary);
-    opacity: 0.15;
-    font-family: Georgia, serif;
+    color: var(--color-foreground);
+    opacity: 0.12;
+    font-family: Georgia, "Times New Roman", serif;
+    pointer-events: none;
   }
 
-  .wp-block-quote p {
-    margin-bottom: 1rem;
+  .wp-block-quote p,
+  .prose blockquote p {
+    margin: 0;
     position: relative;
     z-index: 1;
   }
 
-  .wp-block-quote cite {
-    font-size: 0.9375rem;
-    color: var(--color-muted-foreground);
-    font-style: normal;
-    display: block;
-    margin-top: 1rem;
-    font-weight: 600;
+  .wp-block-quote p + p,
+  .prose blockquote p + p {
+    margin-top: 0.875rem;
   }
 
-  .wp-block-quote cite::before {
+  .wp-block-quote cite,
+  .prose blockquote cite {
+    display: block;
+    margin-top: 1rem;
+    font-style: normal;
+    font-size: 0.75rem;
+    color: var(--color-muted-foreground);
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .wp-block-quote cite::before,
+  .prose blockquote cite::before {
     content: "— ";
   }
 
-  /* Pullquote - Even More Dramatic */
+  /* Pullquote — minimal centered */
   .wp-block-pullquote {
-    position: relative;
     border: none;
-    padding: 3rem 2rem;
-    margin: 4rem 0;
-    background: var(--color-card);
-    border-radius: 1.5rem;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+    padding: 2.5rem 0;
+    margin: 3rem 0;
+    background: transparent;
+    border-radius: 0;
     text-align: center;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    overflow: hidden;
+    box-shadow: none;
   }
 
   .wp-block-pullquote::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg,
-      rgb(239, 68, 68) 0%,
-      rgb(249, 115, 22) 25%,
-      rgb(234, 179, 8) 50%,
-      rgb(34, 197, 94) 75%,
-      rgb(59, 130, 246) 100%);
+    content: none;
   }
 
   .wp-block-pullquote blockquote {
-    font-size: 1.875rem;
-    font-weight: 600;
+    font-size: 1.5rem;
+    font-weight: 500;
     line-height: 1.4;
-    font-style: italic;
+    font-style: normal;
+    letter-spacing: -0.02em;
     margin: 0;
+    color: var(--color-foreground);
   }
 
   .wp-block-pullquote cite {
-    font-size: 1rem;
-    color: var(--color-muted-foreground);
-    font-style: normal;
-    margin-top: 1.5rem;
     display: block;
-    font-weight: 500;
+    margin-top: 1rem;
+    font-size: 0.8125rem;
+    color: var(--color-muted-foreground);
+    font-family: var(--font-mono);
+    font-style: normal;
   }
 
-  /* Gallery - Modern Grid with Hover Effects */
+  /* Gallery — minimal grid */
   .wp-block-gallery {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-    margin: 3rem 0;
+    gap: 0.75rem;
+    margin: 2rem 0;
   }
 
   @media (min-width: 768px) {
     .wp-block-gallery {
       grid-template-columns: repeat(3, 1fr);
-      gap: 2rem;
+      gap: 1rem;
     }
   }
 
   .wp-block-gallery .wp-block-image {
     margin: 0;
     overflow: hidden;
-    border-radius: 0.75rem;
-    transition: transform 0.3s ease;
+    border-radius: 0.5rem;
+    transition: opacity 150ms var(--ease);
   }
 
   .wp-block-gallery .wp-block-image:hover {
-    transform: scale(1.05);
-  }
-
-  .wp-block-gallery img {
-    transition: transform 0.3s ease;
-  }
-
-  .wp-block-gallery .wp-block-image:hover img {
-    transform: scale(1.1);
+    opacity: 0.85;
   }
 
   .wp-block-video,
@@ -385,73 +416,74 @@
     margin: 2rem 0;
     border-radius: 0.5rem;
     overflow: hidden;
+    border: 1px solid var(--color-border);
   }
 
   .wp-block-audio {
     margin: 1.5rem 0;
   }
 
-  /* WordPress table wrapper - Responsive */
+  /* Tables */
   .wp-block-table,
   figure.wp-block-table {
     margin: 2rem 0;
     overflow-x: auto;
     overflow-y: hidden;
-    border-radius: 0.75rem;
+    border-radius: 0.5rem;
     border: 1px solid var(--color-border);
-    background: var(--color-card);
-    /* Añadir scroll suave en móvil */
+    background: var(--color-background);
     -webkit-overflow-scrolling: touch;
   }
 
-  .wp-block-table table {
+  .wp-block-table table,
+  .prose table {
     width: 100%;
     border-collapse: collapse;
     margin: 0 !important;
-    /* Prevenir que la tabla se encoja demasiado */
     min-width: 600px;
+    font-size: 0.9375rem;
   }
 
-  /* En tablets y móviles, hacer las tablas más compactas */
   @media (max-width: 768px) {
-    .wp-block-table table {
+    .wp-block-table table,
+    .prose table {
       min-width: 100%;
-      font-size: 0.875rem;
-    }
-
-    .wp-block-table th,
-    .wp-block-table td {
-      padding: 0.5rem 0.75rem;
-      white-space: nowrap;
+      font-size: 0.8125rem;
     }
   }
 
-  /* Table header */
-  .wp-block-table thead {
+  .wp-block-table thead,
+  .prose thead {
     background-color: var(--color-muted);
   }
 
-  .wp-block-table th {
-    background-color: var(--color-muted);
-    padding: 0.75rem 1rem;
-    font-weight: 600;
+  .wp-block-table th,
+  .prose th {
+    padding: 0.625rem 1rem;
+    font-weight: 500;
+    text-align: left;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-muted-foreground);
     border-bottom: 1px solid var(--color-border);
-    border-right: 1px solid var(--color-border);
   }
 
-  .wp-block-table th:last-child {
-    border-right: none;
+  .wp-block-table td,
+  .prose td {
+    padding: 0.625rem 1rem;
+    border-bottom: 1px solid var(--color-border);
   }
 
-  /* Respetar alineación de WordPress */
+  .wp-block-table tbody tr:last-child td,
+  .prose tbody tr:last-child td {
+    border-bottom: none;
+  }
+
   .wp-block-table th.has-text-align-center,
   .wp-block-table td.has-text-align-center {
     text-align: center;
-  }
-
-  .wp-block-table th.has-text-align-left,
-  .wp-block-table td.has-text-align-left {
-    text-align: left;
   }
 
   .wp-block-table th.has-text-align-right,
@@ -459,88 +491,9 @@
     text-align: right;
   }
 
-  /* Table body */
-  .wp-block-table tbody tr {
-    background-color: var(--color-card);
-  }
-
-  .wp-block-table td {
-    padding: 0.75rem 1rem;
-    border-bottom: 1px solid var(--color-border);
-    border-right: 1px solid var(--color-border);
-  }
-
-  .wp-block-table td:last-child {
-    border-right: none;
-  }
-
-  .wp-block-table tbody tr:last-child td {
-    border-bottom: none;
-  }
-
-  /* Code dentro de tablas */
-  .wp-block-table code {
-    font-size: 0.875rem;
-    padding: 0.125rem 0.375rem;
-    border-radius: 0.25rem;
-    background-color: var(--color-muted);
-    font-family: ui-monospace, "SF Mono", Monaco, Consolas, monospace;
-  }
-
-  /* Prose tables (fallback para tablas no de WordPress) - Responsive */
-  .prose {
-    overflow-x: auto;
-  }
-
-  .prose table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 2rem 0;
-    border-radius: 0.75rem;
-    border: 1px solid var(--color-border);
-    background: var(--color-card);
-    min-width: 600px;
-  }
-
-  @media (max-width: 768px) {
-    .prose table {
-      min-width: 100%;
-      font-size: 0.875rem;
-    }
-  }
-
-  .prose thead {
-    background-color: var(--color-muted);
-  }
-
-  .prose th {
-    padding: 0.75rem 1rem;
-    text-align: left;
-    font-weight: 600;
-    border-bottom: 1px solid var(--color-border);
-    border-right: 1px solid var(--color-border);
-  }
-
-  .prose th:last-child {
-    border-right: none;
-  }
-
-  .prose td {
-    padding: 0.75rem 1rem;
-    border-bottom: 1px solid var(--color-border);
-    border-right: 1px solid var(--color-border);
-  }
-
-  .prose td:last-child {
-    border-right: none;
-  }
-
-  .prose tr:last-child td {
-    border-bottom: none;
-  }
-
   .wp-block-separator {
     margin: 3rem 0;
+    border: none;
     border-top: 1px solid var(--color-border);
   }
 
@@ -579,261 +532,220 @@
     justify-content: center;
   }
 
-  /* Buttons - Modern with Gradient on Hover */
+  /* Buttons — solid, no gradient */
   .wp-block-button {
     display: inline-block;
     margin: 1.5rem 0;
   }
 
   .wp-block-button__link {
-    position: relative;
-    background-color: var(--color-foreground);
-    color: var(--color-background);
-    padding: 0.875rem 2rem;
-    border-radius: 0.625rem;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 0.9375rem;
-    transition: all 0.3s ease;
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    overflow: hidden;
-  }
-
-  .wp-block-button__link::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg,
-      rgb(239, 68, 68) 0%,
-      rgb(249, 115, 22) 50%,
-      rgb(234, 179, 8) 100%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: 0;
-  }
-
-  .wp-block-button__link:hover::before {
-    opacity: 1;
+    background-color: var(--color-foreground);
+    color: var(--color-background);
+    padding: 0.625rem 1.25rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9375rem;
+    border: 1px solid var(--color-foreground);
+    transition: opacity 150ms var(--ease);
   }
 
   .wp-block-button__link:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    opacity: 0.85;
   }
 
-  .wp-block-button__link span {
-    position: relative;
-    z-index: 1;
+  .wp-block-button.is-style-outline .wp-block-button__link {
+    background-color: transparent;
+    color: var(--color-foreground);
+  }
+
+  .wp-block-button.is-style-outline .wp-block-button__link:hover {
+    background-color: var(--color-muted);
+    opacity: 1;
   }
 
   .wp-block-list {
     margin: 1.5rem 0;
   }
 
-  .wp-block-list li {
-    line-height: 1.75;
-    margin: 0.5rem 0;
-  }
-
-  /* Code Block Pro - Vercel Style */
+  /* ============================================
+     Code Block Pro — unified surface, no divider
+     ============================================ */
   .wp-block-code-block-pro,
   .wp-block-kevinbatdorf-code-block-pro,
   .code-block-wrapper {
     position: relative !important;
     margin: 2rem 0 !important;
-    border-radius: 0.75rem !important;
+    border-radius: 0.625rem !important;
     border: 1px solid var(--color-border) !important;
     overflow: hidden !important;
-    background: var(--color-card) !important;
-    font-family: ui-monospace, "SF Mono", Monaco, "Cascadia Mono", "Segoe UI Mono", "Roboto Mono", Consolas, monospace !important;
+    background: var(--color-muted) !important;
+    font-family: var(--font-mono) !important;
   }
 
-  /* Header del code block */
   .wp-block-code-block-pro .code-block-header,
   .code-block-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.75rem 1rem;
-    background: var(--color-muted);
-    border-bottom: 1px solid var(--color-border);
-    min-height: 2.5rem;
+    padding: 0.625rem 1rem 0.25rem 1rem;
+    background: transparent;
+    border-bottom: none;
+    min-height: 0;
   }
 
-  /* Label de lenguaje en el header */
   .wp-block-code-block-pro .code-language,
   .code-language {
-    font-size: 0.8125rem;
+    font-size: 0.6875rem;
     color: var(--color-muted-foreground);
     font-weight: 500;
-    font-family: var(--font-sans);
-    text-transform: capitalize;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
   }
 
-  /* Pre styling */
   .wp-block-code-block-pro pre,
   .wp-block-kevinbatdorf-code-block-pro pre,
   .code-block-wrapper pre {
     margin: 0 !important;
-    padding: 1rem !important;
+    padding: 0.5rem 1rem 1rem 1rem !important;
     overflow-x: auto !important;
-    background: var(--color-card) !important;
+    background: transparent !important;
+    font-size: 0.8125rem !important;
+    line-height: 1 !important;
   }
 
-  /* Shiki theme override */
-  .wp-block-code-block-pro pre.shiki,
-  .wp-block-kevinbatdorf-code-block-pro pre.shiki {
-    background-color: var(--color-card) !important;
-  }
-
-  /* Code styling */
   .wp-block-code-block-pro code,
   .wp-block-kevinbatdorf-code-block-pro code,
   .code-block-wrapper code {
-    font-family: ui-monospace, "SF Mono", Monaco, "Cascadia Mono", "Segoe UI Mono", "Roboto Mono", Consolas, monospace !important;
-    font-size: 0.875rem !important;
-    line-height: 0.3 !important;
+    font-family: var(--font-mono) !important;
+    font-size: 0.8125rem !important;
+    line-height: 1 !important;
     color: var(--color-foreground) !important;
   }
 
-  /* Code block lines */
   .wp-block-code-block-pro .line,
   .wp-block-kevinbatdorf-code-block-pro .line {
     display: block;
+    line-height: 1;
   }
 
-  /* Syntax highlighting - GitHub Style */
-  /* Colores inspirados en los temas oficiales de GitHub */
-
-  /* Color base para todos los spans */
+  /* Syntax coloring — positional cycling (WP output has no semantic tokens),
+     GitHub-inspired palette tuned for slate surfaces */
   .wp-block-code-block-pro .line span,
   .wp-block-kevinbatdorf-code-block-pro .line span {
-    color: #24292f; /* GitHub text default */
+    color: #24292f;
   }
 
-  /* GitHub Light Theme - aplicar colores de forma alternada */
-  /* Keywords (function, const, let, import, etc) */
   .wp-block-code-block-pro .line span:nth-child(6n+1),
   .wp-block-kevinbatdorf-code-block-pro .line span:nth-child(6n+1) {
-    color: #cf222e; /* GitHub red - keywords */
+    color: #cf222e;
   }
 
-  /* Functions and methods */
   .wp-block-code-block-pro .line span:nth-child(6n+2),
   .wp-block-kevinbatdorf-code-block-pro .line span:nth-child(6n+2) {
-    color: #8250df; /* GitHub purple - functions */
+    color: #8250df;
   }
 
-  /* Strings */
   .wp-block-code-block-pro .line span:nth-child(6n+3),
   .wp-block-kevinbatdorf-code-block-pro .line span:nth-child(6n+3) {
-    color: #0a3069; /* GitHub blue - strings */
+    color: #0a3069;
   }
 
-  /* Numbers and constants */
   .wp-block-code-block-pro .line span:nth-child(6n+4),
   .wp-block-kevinbatdorf-code-block-pro .line span:nth-child(6n+4) {
-    color: #0550ae; /* GitHub blue - constants */
+    color: #0550ae;
   }
 
-  /* Variables and properties */
   .wp-block-code-block-pro .line span:nth-child(6n+5),
   .wp-block-kevinbatdorf-code-block-pro .line span:nth-child(6n+5) {
-    color: #953800; /* GitHub orange - variables */
+    color: #953800;
   }
 
-  /* Comments and docs */
   .wp-block-code-block-pro .line span:nth-child(6n+6),
   .wp-block-kevinbatdorf-code-block-pro .line span:nth-child(6n+6) {
-    color: #57606a; /* GitHub gray - comments */
-    opacity: 0.8;
+    color: #57606a;
+    font-style: italic;
   }
 
-  /* GitHub Dark Theme - colores para modo oscuro */
   .dark .wp-block-code-block-pro .line span,
   .dark .wp-block-kevinbatdorf-code-block-pro .line span {
-    color: #e6edf3; /* GitHub dark text default */
+    color: #e6edf3;
   }
 
-  /* Keywords */
   .dark .wp-block-code-block-pro .line span:nth-child(6n+1),
   .dark .wp-block-kevinbatdorf-code-block-pro .line span:nth-child(6n+1) {
-    color: #ff7b72; /* GitHub dark red - keywords */
+    color: #ff7b72;
   }
 
-  /* Functions and methods */
   .dark .wp-block-code-block-pro .line span:nth-child(6n+2),
   .dark .wp-block-kevinbatdorf-code-block-pro .line span:nth-child(6n+2) {
-    color: #d2a8ff; /* GitHub dark purple - functions */
+    color: #d2a8ff;
   }
 
-  /* Strings */
   .dark .wp-block-code-block-pro .line span:nth-child(6n+3),
   .dark .wp-block-kevinbatdorf-code-block-pro .line span:nth-child(6n+3) {
-    color: #a5d6ff; /* GitHub dark blue - strings */
+    color: #a5d6ff;
   }
 
-  /* Numbers and constants */
   .dark .wp-block-code-block-pro .line span:nth-child(6n+4),
   .dark .wp-block-kevinbatdorf-code-block-pro .line span:nth-child(6n+4) {
-    color: #79c0ff; /* GitHub dark blue - constants */
+    color: #79c0ff;
   }
 
-  /* Variables and properties */
   .dark .wp-block-code-block-pro .line span:nth-child(6n+5),
   .dark .wp-block-kevinbatdorf-code-block-pro .line span:nth-child(6n+5) {
-    color: #ffa657; /* GitHub dark orange - variables */
+    color: #ffa657;
   }
 
-  /* Comments and docs */
   .dark .wp-block-code-block-pro .line span:nth-child(6n+6),
   .dark .wp-block-kevinbatdorf-code-block-pro .line span:nth-child(6n+6) {
-    color: #8b949e; /* GitHub dark gray - comments */
-    opacity: 0.8;
+    color: #8b949e;
+    font-style: italic;
   }
 
-  /* Copy button dentro del header */
+  /* Copy button — ghost icon, no border by default */
   .code-block-header span[role="button"][aria-label="Copy"] {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0.375rem 0.75rem;
-    border-radius: 0.375rem;
+    padding: 0.25rem;
+    border-radius: 0.25rem;
     background: transparent;
-    border: 1px solid var(--color-border);
-    color: var(--color-foreground);
+    border: 1px solid transparent;
+    color: var(--color-muted-foreground);
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 150ms var(--ease);
     font-size: 0.75rem;
+    opacity: 0.7;
   }
 
   .code-block-header span[role="button"][aria-label="Copy"]:hover {
-    background: var(--color-secondary);
-    border-color: var(--color-foreground);
+    background: var(--color-background);
+    color: var(--color-foreground);
+    border-color: var(--color-border);
+    opacity: 1;
   }
 
   .code-block-header span[role="button"][aria-label="Copy"].copied {
-    background: rgb(34, 197, 94);
-    border-color: rgb(34, 197, 94);
-    color: white;
+    background: transparent;
+    border-color: transparent;
+    color: var(--color-foreground);
+    opacity: 1;
   }
 
   .code-block-header span[role="button"][aria-label="Copy"] svg {
-    width: 1rem;
-    height: 1rem;
+    width: 0.875rem;
+    height: 0.875rem;
   }
 
   .code-block-header span[role="button"][aria-label="Copy"] svg path {
     stroke: currentColor;
   }
 
-  /* Mostrar el check cuando está copiado */
   .code-block-header span[role="button"][aria-label="Copy"] .with-check {
     display: none;
   }
@@ -846,229 +758,158 @@
     display: none;
   }
 
-  .code-block-line {
-    display: block;
-    min-height: 1.7em;
-  }
-
-  .code-block-line-number {
-    display: inline-block;
-    width: 2.5rem;
-    user-select: none;
-    color: var(--color-muted-foreground);
-    text-align: right;
-    padding-right: 1.5rem;
-  }
-
+  /* Fallback pre/code (for non-WP code) */
   pre {
     background-color: var(--color-muted);
+    border: 1px solid var(--color-border);
     border-radius: 0.5rem;
-    padding: 1rem;
+    padding: 1rem 1.25rem;
     margin: 2rem 0;
     overflow-x: auto;
-  }
-
-  code {
-    font-family: ui-monospace, "SF Mono", Monaco, "Cascadia Mono", "Segoe UI Mono", "Roboto Mono", Consolas, monospace;
-    font-size: 0.875rem;
-    background-color: var(--color-muted);
-    padding: 0.125rem 0.375rem;
-    border-radius: 0.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    line-height: 1;
   }
 
   pre code {
     background-color: transparent;
     padding: 0;
+    border: none;
+    font-size: inherit;
   }
 
-  p code,
-  li code {
-    font-size: 0.875rem;
+  /* KaTeX */
+  .agr-math-block {
+    margin: 1.5rem 0;
+    overflow-x: auto;
   }
 
-  /* ============================================
-     Custom Prism.js Theme - Minimalist
-     Light & Dark Mode Compatible
-     ============================================ */
-
-  /* Base code styling */
-  code[class*="language-"],
-  pre[class*="language-"] {
-    color: var(--color-foreground);
-    background: none;
-    font-family: ui-monospace, "SF Mono", Monaco, "Cascadia Mono", "Segoe UI Mono", "Roboto Mono", Consolas, monospace;
-    font-size: 0.875rem;
-    text-align: left;
-    white-space: pre;
-    word-spacing: normal;
-    word-break: normal;
-    word-wrap: normal;
-    line-height: 1;
-    tab-size: 2;
-    hyphens: none;
-  }
-
-  pre[class*="language-"] {
-    padding: 1rem;
-    margin: 0;
-    overflow: auto;
-  }
-
-  /* Inline code */
-  :not(pre) > code[class*="language-"] {
-    padding: 0.125rem 0.375rem;
-    border-radius: 0.25rem;
-    background: var(--color-muted);
-  }
-
-  /* Token colors - Light Mode - Pastel Minimalist */
-  .token.comment,
-  .token.prolog,
-  .token.doctype,
-  .token.cdata {
-    color: rgb(156, 163, 175); /* Pastel gray */
-    font-style: italic;
-    opacity: 0.8;
-  }
-
-  .token.punctuation {
-    color: rgb(107, 114, 128); /* Soft gray */
-  }
-
-  .token.property,
-  .token.tag,
-  .token.boolean,
-  .token.number,
-  .token.constant,
-  .token.symbol,
-  .token.deleted {
-    color: rgb(168, 85, 247); /* Pastel purple */
-  }
-
-  .token.selector,
-  .token.attr-name,
-  .token.string,
-  .token.char,
-  .token.builtin,
-  .token.inserted {
-    color: rgb(251, 146, 60); /* Pastel orange */
-  }
-
-  .token.operator,
-  .token.entity,
-  .token.url,
-  .language-css .token.string,
-  .style .token.string {
-    color: rgb(139, 92, 246); /* Soft violet */
-  }
-
-  .token.atrule,
-  .token.attr-value,
-  .token.keyword {
-    color: rgb(236, 72, 153); /* Pastel pink */
-    font-weight: 500;
-  }
-
-  .token.function,
-  .token.class-name {
-    color: rgb(59, 130, 246); /* Pastel blue */
-  }
-
-  .token.regex,
-  .token.important,
-  .token.variable {
-    color: rgb(34, 197, 94); /* Pastel green */
-  }
-
-  /* Token colors - Dark Mode - Pastel Minimalist */
-  .dark .token.comment,
-  .dark .token.prolog,
-  .dark .token.doctype,
-  .dark .token.cdata {
-    color: rgb(148, 163, 184); /* Soft slate */
-    opacity: 0.7;
-  }
-
-  .dark .token.punctuation {
-    color: rgb(148, 163, 184); /* Soft slate */
-  }
-
-  .dark .token.property,
-  .dark .token.tag,
-  .dark .token.boolean,
-  .dark .token.number,
-  .dark .token.constant,
-  .dark .token.symbol,
-  .dark .token.deleted {
-    color: rgb(196, 181, 253); /* Pastel purple light */
-  }
-
-  .dark .token.selector,
-  .dark .token.attr-name,
-  .dark .token.string,
-  .dark .token.char,
-  .dark .token.builtin,
-  .dark .token.inserted {
-    color: rgb(253, 186, 116); /* Pastel orange light */
-  }
-
-  .dark .token.operator,
-  .dark .token.entity,
-  .dark .token.url,
-  .dark .language-css .token.string,
-  .dark .style .token.string {
-    color: rgb(167, 139, 250); /* Soft violet light */
-  }
-
-  .dark .token.atrule,
-  .dark .token.attr-value,
-  .dark .token.keyword {
-    color: rgb(244, 114, 182); /* Pastel pink light */
-    font-weight: 500;
-  }
-
-  .dark .token.function,
-  .dark .token.class-name {
-    color: rgb(96, 165, 250); /* Pastel blue light */
-  }
-
-  .dark .token.regex,
-  .dark .token.important,
-  .dark .token.variable {
-    color: rgb(134, 239, 172); /* Pastel green light */
-  }
-
-  /* Special tokens */
-  .token.important,
-  .token.bold {
-    font-weight: 700;
-  }
-
-  .token.italic {
-    font-style: italic;
-  }
-
-  .token.entity {
-    cursor: help;
-  }
-
-  /* Line highlighting */
-  .line-highlight {
-    background: rgba(107, 114, 128, 0.1);
-    border-left: 3px solid rgb(59, 130, 246);
-    padding-left: 0.75rem;
-    margin-left: -1rem;
-  }
-
-  .dark .line-highlight {
-    background: rgba(148, 163, 184, 0.1);
-    border-left-color: rgb(96, 165, 250);
+  .agr-math-inline {
+    display: inline-block;
   }
 }
 
+/* ============================================
+   View Transition Recipes
+   ============================================ */
 
+@keyframes vt-fade {
+  from { filter: blur(2px); opacity: 0; }
+  to { filter: blur(0); opacity: 1; }
+}
 
-/* Hide reCAPTCHA v3 badge */
+@keyframes vt-slide {
+  from { translate: var(--vt-slide-offset); }
+  to { translate: 0; }
+}
+
+::view-transition-old(.fade-out) {
+  animation: var(--duration-exit) ease-in vt-fade reverse;
+}
+
+::view-transition-new(.fade-in) {
+  animation: var(--duration-enter) ease-out var(--duration-exit) both vt-fade;
+}
+
+/* Directional navigation */
+::view-transition-old(.nav-forward) {
+  --vt-slide-offset: -40px;
+  animation:
+    var(--duration-exit) ease-in both vt-fade reverse,
+    var(--duration-move) ease-in-out both vt-slide reverse;
+}
+
+::view-transition-new(.nav-forward) {
+  --vt-slide-offset: 40px;
+  animation:
+    var(--duration-enter) ease-out var(--duration-exit) both vt-fade,
+    var(--duration-move) ease-in-out both vt-slide;
+}
+
+::view-transition-old(.nav-back) {
+  --vt-slide-offset: 40px;
+  animation:
+    var(--duration-exit) ease-in both vt-fade reverse,
+    var(--duration-move) ease-in-out both vt-slide reverse;
+}
+
+::view-transition-new(.nav-back) {
+  --vt-slide-offset: -40px;
+  animation:
+    var(--duration-enter) ease-out var(--duration-exit) both vt-fade,
+    var(--duration-move) ease-in-out both vt-slide;
+}
+
+/* Shared element morph */
+::view-transition-group(.morph) {
+  animation-duration: var(--duration-move);
+}
+
+::view-transition-image-pair(.morph) {
+  animation-name: vt-via-blur;
+}
+
+@keyframes vt-via-blur {
+  30% { filter: blur(3px); }
+}
+
+/* Text morph (no raster scaling) */
+::view-transition-group(.text-morph) {
+  animation-duration: var(--duration-move);
+}
+
+::view-transition-old(.text-morph) {
+  display: none;
+}
+
+::view-transition-new(.text-morph) {
+  animation: none;
+  object-fit: none;
+  object-position: left top;
+}
+
+/* Persistent nav */
+::view-transition-group(persistent-nav) {
+  animation: none;
+  z-index: 100;
+}
+
+/* Theme toggle circular reveal */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-new(root) {
+  z-index: 1;
+}
+
+::view-transition-old(root) {
+  z-index: 9999;
+}
+
+.dark::view-transition-old(root) {
+  z-index: 1;
+}
+
+.dark::view-transition-new(root) {
+  z-index: 9999;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}
+
+/* Hide reCAPTCHA badge */
 .grecaptcha-badge {
   visibility: hidden !important;
   opacity: 0 !important;

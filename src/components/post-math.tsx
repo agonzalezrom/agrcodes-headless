@@ -1,4 +1,4 @@
-'use client'
+"use client"
 
 import {useEffect} from 'react'
 import 'katex/dist/katex.min.css'
@@ -26,12 +26,9 @@ export function PostMath() {
 
       // Intentar cargar KaTeX dinámicamente
       try {
-        // @ts-ignore
-        const katex = await import('katex')
-        // @ts-ignore
-        window.katex = katex
+        window.katex = await import('katex')
         return true
-      } catch (error) {
+      } catch {
         return false
       }
     }
@@ -63,14 +60,12 @@ export function PostMath() {
             element.tagName === 'DIV'
 
           // Renderizar la fórmula con KaTeX
-          // @ts-ignore
           window.katex.render(formula, element as HTMLElement, {
             displayMode: displayMode,
             throwOnError: false,
             strict: 'ignore',
           })
-        } catch (error) {
-          // Mostrar un mensaje de error discreto
+        } catch {
           element.innerHTML = `<span style="color: #ef4444; font-size: 0.9em;">⚠️ Error renderizando</span>`
         }
       })
@@ -95,16 +90,6 @@ export function PostMath() {
 // Agregar la declaración de tipos para KaTeX en el objeto window
 declare global {
   interface Window {
-    katex?: {
-      render: (
-        expression: string,
-        container: HTMLElement,
-        options?: {
-          displayMode?: boolean
-          throwOnError?: boolean
-          strict?: boolean | string
-        }
-      ) => void
-    }
+    katex?: typeof import('katex')
   }
 }

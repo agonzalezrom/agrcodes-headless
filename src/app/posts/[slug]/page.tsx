@@ -1,31 +1,29 @@
 import Link from "next/link"
-import Image from "next/image"
 import type {Metadata} from "next"
 import {notFound} from "next/navigation"
-import { cacheLife } from "next/cache"
 
 import {ThemeToggle} from "@/components/theme-toggle"
 import {CodeBlock} from "@/components/code-block"
 import {PostMath} from "@/components/post-math"
-import {getPostBySlug, getAllPostSlugs} from "@/lib/wordpress"
-import {calculateReadingTime} from "@/lib/utils"
+import {ReadingProgress} from "@/components/reading-progress"
+import {TableOfContents} from "@/components/table-of-contents"
+import {PostNavigation} from "@/components/post-navigation"
+import {NewsletterForm} from "@/components/newsletter-form"
+import {getPostBySlug, getAllPostSlugs, getAdjacentPosts} from "@/lib/wordpress"
+import {calculateReadingTime, formatDate} from "@/lib/utils"
 
-// ISR: Revalidate every 60 seconds for near real-time updates
 export const revalidate = 60
 
 export async function generateStaticParams() {
     return await getAllPostSlugs()
 }
 
-export async function generateMetadata({params}: { params: Promise<{slug: string }>}): Promise<Metadata> {
-
-    const { slug } = await params
+export async function generateMetadata({params}: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+    const {slug} = await params
     const post = await getPostBySlug(slug)
 
     if (!post) {
-        return {
-            title: 'Post no encontrado - agrcodes.com',
-        }
+        return {title: 'Post no encontrado - agrcodes.com'}
     }
 
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://agrcodes.com'
@@ -43,16 +41,15 @@ export async function generateMetadata({params}: { params: Promise<{slug: string
             url: postUrl,
             siteName: 'agrcodes.com',
             publishedTime: post.dateISO,
+            modifiedTime: post.modifiedISO,
             authors: [post.author.name],
             images: post.seo?.ogImage
-                ? [
-                    {
-                        url: post.seo.ogImage,
-                        width: post.featuredImage?.width || 1200,
-                        height: post.featuredImage?.height || 630,
-                        alt: post.title,
-                    },
-                ]
+                ? [{
+                    url: post.seo.ogImage,
+                    width: post.featuredImage?.width || 1200,
+                    height: post.featuredImage?.height || 630,
+                    alt: post.title,
+                }]
                 : [],
         },
         twitter: {
@@ -62,29 +59,24 @@ export async function generateMetadata({params}: { params: Promise<{slug: string
             creator: '@agrcodes',
             images: post.seo?.twitterImage ? [post.seo.twitterImage] : [],
         },
-        alternates: {
-            canonical: postUrl,
-        },
-        other: {
-            // JSON-LD será agregado en el componente
-        }
+        alternates: {canonical: postUrl},
     }
 }
 
 export default async function PostPage({params}: { params: Promise<{ slug: string }> }) {
+    const {slug} = await params
+    const [post, adjacents] = await Promise.all([
+        getPostBySlug(slug),
+        getAdjacentPosts(slug),
+    ])
 
-    const { slug } = await params
-    const post = await getPostBySlug(slug)
-
-    if (!post) {
-        notFound()
-    }
+    if (!post) notFound()
 
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://agrcodes.com'
     const postUrl = `${baseUrl}/posts/${post.slug}`
     const readingTime = calculateReadingTime(post.content)
+    const modifiedDate = post.modifiedISO && post.modifiedISO !== post.dateISO ? post.modifiedISO : null
 
-    // JSON-LD Structured Data
     const jsonLd = {
         '@context': 'https://schema.org',
         '@type': 'BlogPosting',
@@ -92,7 +84,7 @@ export default async function PostPage({params}: { params: Promise<{ slug: strin
         description: post.excerpt,
         image: post.seo?.ogImage || post.featuredImage?.url,
         datePublished: post.dateISO,
-        dateModified: post.dateISO,
+        dateModified: post.modifiedISO || post.dateISO,
         author: {
             '@type': 'Person',
             name: post.author.name,
@@ -101,20 +93,15 @@ export default async function PostPage({params}: { params: Promise<{ slug: strin
         publisher: {
             '@type': 'Person',
             name: 'Alejandro González Romero',
-            logo: {
-                '@type': 'ImageObject',
-                url: `${baseUrl}/logo.png`,
-            },
+            logo: {'@type': 'ImageObject', url: `${baseUrl}/logo.png`},
         },
-        mainEntityOfPage: {
-            '@type': 'WebPage',
-            '@id': postUrl,
-        },
+        mainEntityOfPage: {'@type': 'WebPage', '@id': postUrl},
     }
 
+    const category = post.categories?.[0]
+
     return (
-        <div className="min-h-screen">
-            {/* JSON-LD Structured Data */}
+        <div className="min-h-screen flex flex-col">
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{__html: JSON.stringify(jsonLd)}}
@@ -122,48 +109,154 @@ export default async function PostPage({params}: { params: Promise<{ slug: strin
 
             <CodeBlock/>
             <PostMath/>
+            <ReadingProgress/>
 
-            <nav className="fixed top-6 z-50 left-6 right-6 flex items-center justify-between">
-                <Link
-                    href="/"
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                    ← Inicio
-                </Link>
-                <ThemeToggle/>
+            <nav
+                className="sticky top-0 z-30 backdrop-blur-md bg-background/70 border-b border-border/60"
+                aria-label="Navegación principal"
+            >
+                <div className="mx-auto max-w-[1080px] px-6 py-3 flex items-center justify-between">
+                    <Link
+                        href="/"
+                        className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                        <span aria-hidden="true">←</span>
+                        <span>Blog</span>
+                    </Link>
+                    <ThemeToggle/>
+                </div>
             </nav>
 
-            <article className="max-w-5xl mx-auto px-6 py-16 md:py-24">
-                <header className="mb-16 md:mb-20 text-center">
-                    <Image
-                        src={post.author.avatar}
-                        alt={post.author.name}
-                        className="w-20 h-20 rounded-full mx-auto mb-4 object-cover"
-                        height={150}
-                        width={150}
-                    />
-                    <p className="font-semibold text-lg mb-1">{post.author.name}</p>
-                    <div className="flex items-center justify-center gap-3 text-sm text-muted-foreground mb-8">
-                        <time>{post.date}</time>
-                        <span>·</span>
-                        <span>{readingTime} min de lectura</span>
-                    </div>
-                    <h1 className="text-4xl md:text-5xl font-bold leading-tight inline-block">
-                        {post.title}
-                    </h1>
-                </header>
-
-                <div
-                    className="prose prose-lg"
-                    dangerouslySetInnerHTML={{__html: post.content}}
-                />
-
-                <footer className="mt-20 pt-12 border-t">
-                    <Link href="/" className="text-sm text-muted-foreground hover:text-foreground">
-                        ← Volver a todos los posts
-                    </Link>
-                </footer>
-            </article>
+            <main className="flex-1 mx-auto w-full max-w-[1080px] px-6 py-12 md:py-16">
+                <article>
+                    {post.headings.length > 0 ? (
+                        <div className="xl:grid xl:grid-cols-[minmax(0,680px)_200px] xl:gap-x-12 xl:justify-center">
+                            <div className="mx-auto xl:mx-0 max-w-[680px]">
+                                <PostHeader
+                                    category={category}
+                                    title={post.title}
+                                    slug={slug}
+                                    dateISO={post.dateISO}
+                                    authorName={post.author.name}
+                                    readingTime={readingTime}
+                                />
+                                <div
+                                    className="prose"
+                                    dangerouslySetInnerHTML={{__html: post.content}}
+                                />
+                                <PostFooter
+                                    tags={post.tags}
+                                    modifiedDate={modifiedDate}
+                                    previous={adjacents.previous}
+                                    next={adjacents.next}
+                                />
+                            </div>
+                            <aside className="hidden xl:block">
+                                <div className="sticky top-24 mt-24">
+                                    <TableOfContents headings={post.headings}/>
+                                </div>
+                            </aside>
+                        </div>
+                    ) : (
+                        <div className="mx-auto max-w-[680px]">
+                            <PostHeader
+                                category={category}
+                                title={post.title}
+                                slug={slug}
+                                dateISO={post.dateISO}
+                                authorName={post.author.name}
+                                readingTime={readingTime}
+                            />
+                            <div
+                                className="prose"
+                                dangerouslySetInnerHTML={{__html: post.content}}
+                            />
+                            <PostFooter
+                                tags={post.tags}
+                                modifiedDate={modifiedDate}
+                                previous={adjacents.previous}
+                                next={adjacents.next}
+                            />
+                        </div>
+                    )}
+                </article>
+            </main>
         </div>
+    )
+}
+
+interface PostHeaderProps {
+    category?: string
+    title: string
+    slug: string
+    dateISO: string
+    authorName: string
+    readingTime: number
+}
+
+function PostHeader({category, title, slug, dateISO, authorName, readingTime}: PostHeaderProps) {
+    return (
+        <header className="mb-12 md:mb-16">
+            {category && (
+                <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-5">
+                    {category}
+                </p>
+            )}
+            <h1
+                className="text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight leading-[1.1] mb-6"
+                style={{viewTransitionName: `title-${slug}`}}
+            >
+                {title}
+            </h1>
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs uppercase tracking-wider text-muted-foreground">
+                <time dateTime={dateISO}>{formatDate(dateISO)}</time>
+                <span aria-hidden="true">·</span>
+                <span>{readingTime} min</span>
+                <span aria-hidden="true">·</span>
+                <span>{authorName}</span>
+            </div>
+        </header>
+    )
+}
+
+interface PostFooterProps {
+    tags?: string[]
+    modifiedDate: string | null
+    previous: Awaited<ReturnType<typeof getAdjacentPosts>>['previous']
+    next: Awaited<ReturnType<typeof getAdjacentPosts>>['next']
+}
+
+function PostFooter({tags, modifiedDate, previous, next}: PostFooterProps) {
+    return (
+        <>
+            {tags && tags.length > 0 && (
+                <div className="mt-16 flex flex-wrap gap-2">
+                    {tags.map((tag) => (
+                        <span
+                            key={tag}
+                            className="inline-flex items-center font-mono text-[11px] uppercase tracking-wider text-muted-foreground border border-border rounded-full px-2.5 py-1 hover:text-foreground hover:border-foreground/20 transition-colors"
+                        >
+                            #{tag}
+                        </span>
+                    ))}
+                </div>
+            )}
+
+            {modifiedDate && (
+                <p className="mt-8 font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
+                    Actualizado · {formatDate(modifiedDate)}
+                </p>
+            )}
+
+            <div className="mt-16">
+                <NewsletterForm
+                    variant="card"
+                    heading="¿Te gustó este post?"
+                    description="Suscríbete para recibir los próximos en tu correo. Sin spam."
+                />
+            </div>
+
+            <PostNavigation previous={previous} next={next}/>
+        </>
     )
 }
