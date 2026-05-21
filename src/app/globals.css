@@ -901,6 +901,70 @@
   z-index: 9999;
 }
 
+/* === Navigation view transitions ===
+   Theme toggle is type-less (calls document.startViewTransition directly),
+   so the root rules above with `animation: none` win there. Navigation goes
+   through next/link with transitionTypes={['nav-post']}, which scopes the
+   recipes below via :active-view-transition-type(nav-post). */
+
+@keyframes vt-opacity {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes vt-content-rise {
+  from { opacity: 0; transform: translateY(14px); filter: blur(6px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+@keyframes vt-via-blur {
+  30% { filter: blur(2.5px); }
+}
+
+/* Root: new is fully visible from t=0, old fades out on top of it.
+   No opacity gap → no mid-transition background flash. Override the
+   existing dark-mode z-index split so behavior is symmetric. */
+:active-view-transition-type(nav-post)::view-transition-new(root),
+.dark:active-view-transition-type(nav-post)::view-transition-new(root) {
+  animation: none;
+  z-index: 1;
+}
+:active-view-transition-type(nav-post)::view-transition-old(root),
+.dark:active-view-transition-type(nav-post)::view-transition-old(root) {
+  animation: 240ms cubic-bezier(0.4, 0, 0.2, 1) both vt-opacity reverse;
+  z-index: 100;
+}
+
+/* Persistent navbar isolation — applied via React's <ViewTransition name="persistent-nav">.
+   The old snapshot is hidden and the new one snaps in instantly, so backdrop-blur
+   never recaptures and we avoid the start/end flicker on the sticky bar. */
+::view-transition-old(.persistent-nav) {
+  display: none;
+}
+::view-transition-new(.persistent-nav) {
+  animation: none;
+}
+
+/* Shared element morph for title and meta — glides between card and post header */
+::view-transition-group(.morph-glide) {
+  animation-duration: var(--duration-move);
+  animation-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
+}
+::view-transition-image-pair(.morph-glide) {
+  animation-name: vt-via-blur;
+}
+
+/* Fallback exit for named VTs that don't find a matching pair
+   (other cards in the grid when one is clicked) */
+::view-transition-old(.fade-out) {
+  animation: var(--duration-exit) ease-in vt-opacity reverse;
+}
+
+/* Content reveal — prose/category/footer rise into view after the shared morph settles */
+::view-transition-new(.content-reveal) {
+  animation: 360ms cubic-bezier(0.22, 1, 0.36, 1) var(--duration-move) both vt-content-rise;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

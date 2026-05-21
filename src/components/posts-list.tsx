@@ -1,3 +1,4 @@
+import {ViewTransition} from 'react'
 import Link from 'next/link'
 import {getPosts, getTotalPosts} from '@/lib/wordpress'
 import {Cover} from '@/components/cover'
@@ -116,14 +117,11 @@ function PostCard({slug, title, excerpt, dateISO, content, cover}: PostCardProps
     return (
         <Link
             href={`/posts/${slug}`}
+            transitionTypes={['nav-post']}
             className="group block focus:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-xl"
-            style={{viewTransitionName: `card-${slug}`}}
         >
             <article className="flex flex-col gap-3">
-                <div
-                    className="relative aspect-[16/10] overflow-hidden rounded-lg border border-border bg-muted"
-                    style={{viewTransitionName: `cover-${slug}`}}
-                >
+                <div className="relative aspect-[16/10] overflow-hidden rounded-lg border border-border bg-muted">
                     <Cover
                         slug={slug}
                         title={title}
@@ -135,16 +133,20 @@ function PostCard({slug, title, excerpt, dateISO, content, cover}: PostCardProps
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                    <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
-                        <time dateTime={dateISO}>{formatDateShort(dateISO)}</time>
-                        <span aria-hidden="true">·</span>
-                        <span>{readingTime} min</span>
-                    </div>
-                    <h3 className="text-lg md:text-xl font-semibold leading-snug tracking-tight text-foreground">
-                        <span className="bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_1px] bg-no-repeat bg-[position:0_100%] group-hover:bg-[length:100%_1px] transition-[background-size] duration-300">
-                            {title}
-                        </span>
-                    </h3>
+                    <ViewTransition name={`meta-${slug}`} share="morph-glide" exit="fade-out" default="none">
+                        <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
+                            <time dateTime={dateISO}>{formatDateShort(dateISO)}</time>
+                            <span aria-hidden="true">·</span>
+                            <span>{readingTime} min</span>
+                        </div>
+                    </ViewTransition>
+                    <ViewTransition name={`title-${slug}`} share="morph-glide" exit="fade-out" default="none">
+                        <h3 className="text-lg md:text-xl font-semibold leading-snug tracking-tight text-foreground">
+                            <span className="bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_1px] bg-no-repeat bg-[position:0_100%] group-hover:bg-[length:100%_1px] transition-[background-size] duration-300">
+                                {title}
+                            </span>
+                        </h3>
+                    </ViewTransition>
                     {excerpt && (
                         <p
                             className="text-sm text-muted-foreground line-clamp-2 leading-relaxed"

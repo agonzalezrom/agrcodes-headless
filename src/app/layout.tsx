@@ -63,7 +63,7 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({children,}: Readonly<{ children: React.ReactNode }>) {
     return (
-        <html lang="es" className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
+        <html lang="es" className={`${geistSans.variable} ${geistMono.variable}`} data-scroll-behavior="smooth" suppressHydrationWarning>
         <head>
             <link rel="icon" href="/favicon.ico" sizes="any"/>
             <link rel="icon" href="/favicon.svg" type="image/svg+xml"/>

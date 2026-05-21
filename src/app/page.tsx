@@ -1,4 +1,4 @@
-import {Suspense} from "react"
+import {Suspense, ViewTransition} from "react"
 import {ThemeToggle} from "@/components/theme-toggle"
 import {NewsletterForm} from "@/components/newsletter-form"
 import {CommandPalette} from "@/components/command-palette"
@@ -22,19 +22,21 @@ export default async function Home({searchParams}: HomeProps) {
 
     return (
         <div className="min-h-screen flex flex-col">
-            <header className="sticky top-0 z-30 backdrop-blur-md bg-background/70 border-b border-border/60">
-                <div className="mx-auto max-w-5xl px-6 py-3 flex items-center justify-between gap-4">
-                    <a href="/" className="font-mono text-sm tracking-tight text-foreground">
-                        agrcodes
-                    </a>
-                    <div className="flex items-center gap-2">
-                        <div className="w-full max-w-xs">
-                            <CommandPalette posts={allPosts}/>
+            <ViewTransition name="persistent-nav" share="persistent-nav" default="none">
+                <header className="sticky top-0 z-30 backdrop-blur-md bg-background/70 border-b border-border/60">
+                    <div className="mx-auto max-w-5xl px-6 py-3 flex items-center justify-between gap-4">
+                        <a href="/" className="font-mono text-sm tracking-tight text-foreground">
+                            agrcodes
+                        </a>
+                        <div className="flex items-center gap-2">
+                            <div className="w-full max-w-xs">
+                                <CommandPalette posts={allPosts}/>
+                            </div>
+                            <ThemeToggle/>
                         </div>
-                        <ThemeToggle/>
                     </div>
-                </div>
-            </header>
+                </header>
+            </ViewTransition>
 
             <main className="flex-1">
                 <section className="mx-auto max-w-5xl px-6 pt-14 md:pt-20 pb-8">

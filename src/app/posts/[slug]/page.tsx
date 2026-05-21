@@ -1,3 +1,4 @@
+import {ViewTransition} from "react"
 import Link from "next/link"
 import type {Metadata} from "next"
 import {notFound} from "next/navigation"
@@ -111,21 +112,24 @@ export default async function PostPage({params}: { params: Promise<{ slug: strin
             <PostMath/>
             <ReadingProgress/>
 
-            <nav
-                className="sticky top-0 z-30 backdrop-blur-md bg-background/70 border-b border-border/60"
-                aria-label="Navegación principal"
-            >
-                <div className="mx-auto max-w-[1080px] px-6 py-3 flex items-center justify-between">
-                    <Link
-                        href="/"
-                        className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                        <span aria-hidden="true">←</span>
-                        <span>Blog</span>
-                    </Link>
-                    <ThemeToggle/>
-                </div>
-            </nav>
+            <ViewTransition name="persistent-nav" share="persistent-nav" default="none">
+                <nav
+                    className="sticky top-0 z-30 backdrop-blur-md bg-background/70 border-b border-border/60"
+                    aria-label="Navegación principal"
+                >
+                    <div className="mx-auto max-w-[1080px] px-6 py-3 flex items-center justify-between">
+                        <Link
+                            href="/"
+                            transitionTypes={['nav-post']}
+                            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                            <span aria-hidden="true">←</span>
+                            <span>Blog</span>
+                        </Link>
+                        <ThemeToggle/>
+                    </div>
+                </nav>
+            </ViewTransition>
 
             <main className="flex-1 mx-auto w-full max-w-[1080px] px-6 py-12 md:py-16">
                 <article>
@@ -140,16 +144,20 @@ export default async function PostPage({params}: { params: Promise<{ slug: strin
                                     authorName={post.author.name}
                                     readingTime={readingTime}
                                 />
-                                <div
-                                    className="prose"
-                                    dangerouslySetInnerHTML={{__html: post.content}}
-                                />
-                                <PostFooter
-                                    tags={post.tags}
-                                    modifiedDate={modifiedDate}
-                                    previous={adjacents.previous}
-                                    next={adjacents.next}
-                                />
+                                <ViewTransition enter="content-reveal" default="none">
+                                    <div>
+                                        <div
+                                            className="prose"
+                                            dangerouslySetInnerHTML={{__html: post.content}}
+                                        />
+                                        <PostFooter
+                                            tags={post.tags}
+                                            modifiedDate={modifiedDate}
+                                            previous={adjacents.previous}
+                                            next={adjacents.next}
+                                        />
+                                    </div>
+                                </ViewTransition>
                             </div>
                             <aside className="hidden xl:block">
                                 <div className="sticky top-24 mt-24">
@@ -167,16 +175,20 @@ export default async function PostPage({params}: { params: Promise<{ slug: strin
                                 authorName={post.author.name}
                                 readingTime={readingTime}
                             />
-                            <div
-                                className="prose"
-                                dangerouslySetInnerHTML={{__html: post.content}}
-                            />
-                            <PostFooter
-                                tags={post.tags}
-                                modifiedDate={modifiedDate}
-                                previous={adjacents.previous}
-                                next={adjacents.next}
-                            />
+                            <ViewTransition enter="content-reveal" default="none">
+                                <div>
+                                    <div
+                                        className="prose"
+                                        dangerouslySetInnerHTML={{__html: post.content}}
+                                    />
+                                    <PostFooter
+                                        tags={post.tags}
+                                        modifiedDate={modifiedDate}
+                                        previous={adjacents.previous}
+                                        next={adjacents.next}
+                                    />
+                                </div>
+                            </ViewTransition>
                         </div>
                     )}
                 </article>
@@ -198,23 +210,26 @@ function PostHeader({category, title, slug, dateISO, authorName, readingTime}: P
     return (
         <header className="mb-12 md:mb-16">
             {category && (
-                <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-5">
-                    {category}
-                </p>
+                <ViewTransition enter="content-reveal" default="none">
+                    <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-5">
+                        {category}
+                    </p>
+                </ViewTransition>
             )}
-            <h1
-                className="text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight leading-[1.1] mb-6"
-                style={{viewTransitionName: `title-${slug}`}}
-            >
-                {title}
-            </h1>
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs uppercase tracking-wider text-muted-foreground">
-                <time dateTime={dateISO}>{formatDate(dateISO)}</time>
-                <span aria-hidden="true">·</span>
-                <span>{readingTime} min</span>
-                <span aria-hidden="true">·</span>
-                <span>{authorName}</span>
-            </div>
+            <ViewTransition name={`title-${slug}`} share="morph-glide" default="none">
+                <h1 className="text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight leading-[1.1] mb-6">
+                    {title}
+                </h1>
+            </ViewTransition>
+            <ViewTransition name={`meta-${slug}`} share="morph-glide" default="none">
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs uppercase tracking-wider text-muted-foreground">
+                    <time dateTime={dateISO}>{formatDate(dateISO)}</time>
+                    <span aria-hidden="true">·</span>
+                    <span>{readingTime} min</span>
+                    <span aria-hidden="true">·</span>
+                    <span>{authorName}</span>
+                </div>
+            </ViewTransition>
         </header>
     )
 }
