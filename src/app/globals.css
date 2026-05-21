@@ -616,6 +616,8 @@
     background: transparent !important;
     font-size: 0.8125rem !important;
     line-height: 1 !important;
+    font-variant-ligatures: none !important;
+    font-feature-settings: "liga" 0, "clig" 0, "calt" 0 !important;
   }
 
   .wp-block-code-block-pro code,
@@ -625,6 +627,8 @@
     font-size: 0.8125rem !important;
     line-height: 1 !important;
     color: var(--color-foreground) !important;
+    font-variant-ligatures: none !important;
+    font-feature-settings: "liga" 0, "clig" 0, "calt" 0 !important;
   }
 
   .wp-block-code-block-pro .line,
